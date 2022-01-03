@@ -1,3 +1,22 @@
 <resources>
     <string name="app_name">Tugas Kita</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="label_button_register">Register</string>
+    <string name="text_login">Already have an account?</string>
+    <string name="label_button_secondary_login">Login now</string>
+    <string name="placeholder_email">johndoe@email.com</string>
+    <string name="placeholder_password">Input password</string>
+    <string name="label_button_login">Login</string>
+    <string name="text_register">Don\'t have any account?</string>
+    <string name="label_button_secondary_register">Register now</string>
+    <string name="label_button_forgot_password">Forgot password?</string>
+    <string name="title_email_verification">Email Verification</string>
+    <string name="text_email_verify_1">A verification email has been sent to your email.</string>
+    <string name="text_email_verify_2">Please verify your email by click the link.</string>
+    <string name="label_button_email_verify">I have verified my email</string>
+    <string name="label_name">Name</string>
+    <string name="placeholder_name">John Doe</string>
+    <string name="label_button_next">Next</string>
+    <string name="label_button_logout">Logout</string>
 </resources>
