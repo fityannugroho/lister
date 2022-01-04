@@ -9,23 +9,62 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.adapters.TaskAdapter;
+import com.fityan.tugaskita.collections.TaskCollection;
+import com.fityan.tugaskita.models.TaskModel;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements TaskAdapter.OnItemListener {
   /* Authentication. */
   private final FirebaseAuth auth = FirebaseAuth.getInstance();
   private final FirebaseUser user = auth.getCurrentUser();
+
+  /* Collections */
+  private final TaskCollection taskCollection = new TaskCollection();
+
+  /**
+   * List of contact.
+   */
+  private final ArrayList<TaskModel> tasks = new ArrayList<>();
+
+  /**
+   * View element to displaying task list.
+   */
+  private RecyclerView rvTask;
+
+  /**
+   * View element to navigate to add task page.
+   */
+  private FloatingActionButton btnAddTask;
 
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_main);
+
+    /* Initialize view elements. */
+    rvTask = findViewById(R.id.rvTask);
+    btnAddTask = findViewById(R.id.btnAdd);
+
+    /* Retrieve tasks from database then displaying it. */
+    loadTasks();
+
+    /* When Add Button is clicked, */
+    btnAddTask.setOnClickListener(view -> {
+      /* TODO: go to Add Task Page. */
+    });
   }
 
 
@@ -38,6 +77,15 @@ public class MainActivity extends AppCompatActivity {
       startActivity(new Intent(this, UpdateProfileActivity.class));
       finish();
     }
+  }
+
+
+  @Override
+  protected void onRestart() {
+    super.onRestart();
+
+    tasks.clear();
+    loadTasks();
   }
 
 
@@ -65,5 +113,38 @@ public class MainActivity extends AppCompatActivity {
           }).show();
     }
     return super.onOptionsItemSelected(item);
+  }
+
+
+  @Override
+  public void onItemClick(int position) {
+  }
+
+
+  @Override
+  public void onDeleteItem(int position) {
+  }
+
+
+  @Override
+  public void onEditItem(int position) {
+  }
+
+
+  private void loadTasks() {
+    /* Retrieve contact data from database. */
+    taskCollection.findAll(user.getUid()).addOnSuccessListener(queryDocumentSnapshots -> {
+      for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+        tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
+            document.getString(TaskModel.DESCRIPTION_FIELD),
+            document.getTimestamp(TaskModel.DEADLINE_FIELD),
+            document.getString(TaskModel.OWNER_ID_FIELD)));
+      }
+
+      /* Set the adapter to displaying contact list. */
+      rvTask.setAdapter(new TaskAdapter(tasks, this));
+      rvTask.setLayoutManager(new LinearLayoutManager(this));
+      rvTask.setItemAnimator(new DefaultItemAnimator());
+    });
   }
 }

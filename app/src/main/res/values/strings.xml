@@ -19,4 +19,9 @@
     <string name="placeholder_name">John Doe</string>
     <string name="label_button_next">Next</string>
     <string name="label_button_logout">Logout</string>
+    <string name="value_task_title">My first task</string>
+    <string name="value_task_deadline">Sun, Oct 10th, 10.00 AM</string>
+    <string name="desc_btn_edit">Edit this task</string>
+    <string name="desc_btn_delete">Delete this task</string>
+    <string name="desc_btn_add">Add task</string>
 </resources>
