@@ -10,6 +10,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TugasKita">
         <activity
+            android:name=".activities.AddTaskActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.UpdateProfileActivity"
             android:exported="false" />
         <activity

@@ -10,9 +10,11 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.helper.InputHelper;
 import com.fityan.tugaskita.models.TaskModel;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHolder> {
   /**
@@ -21,7 +23,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
   private final ArrayList<TaskModel> tasks;
 
   /**
-   * Closure to handle actions of contact item.
+   * Closure to handle actions of task item.
    */
   private final OnItemListener onItemListener;
 
@@ -48,8 +50,11 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
       @NonNull TaskListViewHolder holder, int position
   ) {
     TaskModel task = tasks.get(position);
+    Date deadline = task.getDeadline().toDate();
 
-    /* TODO: Set display of task items. */
+    /* Set display of task items. */
+    holder.tvTitle.setText(task.getTitle());
+    holder.tvDeadline.setText(InputHelper.dateToString(deadline));
   }
 
 

@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   private final TaskCollection taskCollection = new TaskCollection();
 
   /**
-   * List of contact.
+   * List of task.
    */
   private final ArrayList<TaskModel> tasks = new ArrayList<>();
 
@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
     /* When Add Button is clicked, */
     btnAddTask.setOnClickListener(view -> {
-      /* TODO: go to Add Task Page. */
+      /* go to Add Task Page. */
+      startActivity(new Intent(this, AddTaskActivity.class));
     });
   }
 
@@ -102,7 +103,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     /* If Logout Item is selected. */
     if (item.getItemId() == R.id.logoutItem) {
       /* Show confirmation dialog. */
-      new AlertDialog.Builder(this).setTitle("Logout").setMessage("Are you sure to logout?")
+      new AlertDialog.Builder(this).setTitle("Logout")
+          .setMessage("Are you sure to logout?")
           /* Cancel action. */
           .setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.cancel())
           /* Sign out then redirect to login activity. */
@@ -110,7 +112,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
             auth.signOut();
             startActivity(new Intent(this, LoginActivity.class));
             finish();
-          }).show();
+          })
+          .show();
     }
     return super.onOptionsItemSelected(item);
   }
@@ -132,7 +135,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
 
   private void loadTasks() {
-    /* Retrieve contact data from database. */
+    /* Retrieve task data from database. */
     taskCollection.findAll(user.getUid()).addOnSuccessListener(queryDocumentSnapshots -> {
       for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
         tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
@@ -141,7 +144,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
             document.getString(TaskModel.OWNER_ID_FIELD)));
       }
 
-      /* Set the adapter to displaying contact list. */
+      /* Set the adapter to displaying task list. */
       rvTask.setAdapter(new TaskAdapter(tasks, this));
       rvTask.setLayoutManager(new LinearLayoutManager(this));
       rvTask.setItemAnimator(new DefaultItemAnimator());

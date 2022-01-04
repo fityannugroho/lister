@@ -24,4 +24,10 @@
     <string name="desc_btn_edit">Edit this task</string>
     <string name="desc_btn_delete">Delete this task</string>
     <string name="desc_btn_add">Add task</string>
+    <string name="placeholder_description">Do anything…</string>
+    <string name="placeholder_title">My Task</string>
+    <string name="label_button_add_task">Add Task</string>
+    <string name="label_description">Description</string>
+    <string name="label_deadline">Deadline</string>
+    <string name="label_title">Title</string>
 </resources>
