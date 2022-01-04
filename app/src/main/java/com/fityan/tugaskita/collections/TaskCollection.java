@@ -26,7 +26,7 @@ public class TaskCollection {
 
 
   public Task<DocumentReference> insert(
-      String title, String description, Timestamp deadline, String ownerId, TaskModel task
+      String title, String description, Timestamp deadline, String ownerId
   ) {
     Map<String, Object> data = new HashMap<>();
     data.put(TaskModel.TITLE_FIELD, title);
