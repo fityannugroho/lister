@@ -11,8 +11,7 @@ import java.util.Locale;
 
 public class InputHelper {
   public static final String DATE_FORMAT_HUMAN_SHORT_US = "EE, MMM dd 'at' hh.mm a";
-  public static final String DATE_FORMAT_HUMAN_FULL_US = "EE, MMM dd, yyyy 'at' hh.mm a";
-  public static final String DATE_FORMAT_HUMAN_LONG_US = "EEEE, MMMM dd, yyyy 'at' hh.mm a";
+  public static final String DATE_FORMAT_HUMAN_LONG_US = "EEEE, MMMM dd 'at' hh.mm a";
   public static final String DATE_FORMAT_FOR_TEXT_INPUT = "dd/MM/yyyy HH:mm";
 
 
@@ -53,11 +52,12 @@ public class InputHelper {
    *
    * @param date   The date.
    * @param format The specified date format.
+   * @param locale The time locale.
    * @return The formatted date in string.
    */
   @NonNull
-  public static String dateToString(Date date, String format) {
-    return new SimpleDateFormat(format, Locale.ROOT).format(date);
+  public static String dateToString(Date date, String format, Locale locale) {
+    return new SimpleDateFormat(format, locale).format(date);
   }
 
 
@@ -90,11 +90,14 @@ public class InputHelper {
    *
    * @param strDate The suitable string date.
    * @param format  The specified date format.
+   * @param locale  The time locale.
    * @return The date.
    * @throws ParseException If string doesn't match the format.
    */
-  public static Date stringToDate(String strDate, String format) throws ParseException {
-    return new SimpleDateFormat(format, Locale.ROOT).parse(strDate);
+  public static Date stringToDate(
+      String strDate, String format, Locale locale
+  ) throws ParseException {
+    return new SimpleDateFormat(format, locale).parse(strDate);
   }
 
 

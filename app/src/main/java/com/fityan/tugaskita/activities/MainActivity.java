@@ -123,6 +123,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   public void onItemClick(int position) {
+    /* Go to Detail Task Page with bring contact id. */
+    Intent intent = new Intent(this, DetailTaskActivity.class);
+    intent.putExtra("taskId", tasks.get(position).getId());
+    startActivity(intent);
   }
 
 
