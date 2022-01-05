@@ -86,8 +86,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   @Override
   protected void onRestart() {
     super.onRestart();
-
-    tasks.clear();
     loadTasks();
   }
 
@@ -123,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   public void onItemClick(int position) {
-    /* Go to Detail Task Page with bring contact id. */
+    /* Go to Detail Task Page with bring task id. */
     Intent intent = new Intent(this, DetailTaskActivity.class);
     intent.putExtra("taskId", tasks.get(position).getId());
     startActivity(intent);
@@ -157,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   public void onEditItem(int position) {
-    /* Go to Edit Task Page with bring contact id. */
+    /* Go to Edit Task Page with bring task id. */
     Intent intent = new Intent(this, EditTaskActivity.class);
     intent.putExtra("taskId", tasks.get(position).getId());
     startActivity(intent);
@@ -165,6 +163,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
 
   private void loadTasks() {
+    /* If tasks is not empty. */
+    if (!tasks.isEmpty())
+      tasks.clear();
+
     /* Retrieve task data from database. */
     taskCollection.findAll(user.getUid(), TaskModel.DEADLINE_FIELD, true)
         .addOnSuccessListener(queryDocumentSnapshots -> {
