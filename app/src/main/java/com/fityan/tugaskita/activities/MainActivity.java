@@ -2,9 +2,11 @@ package com.fityan.tugaskita.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -126,6 +128,26 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   public void onDeleteItem(int position) {
+    /* Show confirmation dialog. */
+    new AlertDialog.Builder(this).setTitle("Delete Task")
+        .setMessage("Are you sure to delete this task?")
+        .setPositiveButton("Delete Task", (dialogInterface, i) -> {
+          /* Delete task */
+          taskCollection.delete(tasks.get(position).getId()).addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+              /* Refresh the task list view */
+              onRestart();
+              Toast.makeText(this, "One task has been deleted.", Toast.LENGTH_SHORT).show();
+            } else {
+              Log.e("deleteTask", "Failed to delete task.", task.getException());
+              Toast.makeText(this, "Failed to delete task.", Toast.LENGTH_SHORT).show();
+            }
+          });
+          /* Close the dialog. */
+          dialogInterface.dismiss();
+        })
+        .setNegativeButton("Cancel", null)
+        .show();
   }
 
 
@@ -136,18 +158,19 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   private void loadTasks() {
     /* Retrieve task data from database. */
-    taskCollection.findAll(user.getUid(), TaskModel.DEADLINE_FIELD, true).addOnSuccessListener(queryDocumentSnapshots -> {
-      for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-        tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
-            document.getString(TaskModel.DESCRIPTION_FIELD),
-            document.getTimestamp(TaskModel.DEADLINE_FIELD),
-            document.getString(TaskModel.OWNER_ID_FIELD)));
-      }
+    taskCollection.findAll(user.getUid(), TaskModel.DEADLINE_FIELD, true)
+        .addOnSuccessListener(queryDocumentSnapshots -> {
+          for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+            tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
+                document.getString(TaskModel.DESCRIPTION_FIELD),
+                document.getTimestamp(TaskModel.DEADLINE_FIELD),
+                document.getString(TaskModel.OWNER_ID_FIELD)));
+          }
 
-      /* Set the adapter to displaying task list. */
-      rvTask.setAdapter(new TaskAdapter(tasks, this));
-      rvTask.setLayoutManager(new LinearLayoutManager(this));
-      rvTask.setItemAnimator(new DefaultItemAnimator());
-    });
+          /* Set the adapter to displaying task list. */
+          rvTask.setAdapter(new TaskAdapter(tasks, this));
+          rvTask.setLayoutManager(new LinearLayoutManager(this));
+          rvTask.setItemAnimator(new DefaultItemAnimator());
+        });
   }
 }
