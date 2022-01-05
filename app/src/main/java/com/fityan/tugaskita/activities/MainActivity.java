@@ -136,7 +136,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   private void loadTasks() {
     /* Retrieve task data from database. */
-    taskCollection.findAll(user.getUid()).addOnSuccessListener(queryDocumentSnapshots -> {
+    taskCollection.findAll(user.getUid(), TaskModel.DEADLINE_FIELD, true).addOnSuccessListener(queryDocumentSnapshots -> {
       for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
         tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
             document.getString(TaskModel.DESCRIPTION_FIELD),

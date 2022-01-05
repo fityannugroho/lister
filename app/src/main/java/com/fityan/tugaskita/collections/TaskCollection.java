@@ -6,6 +6,7 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
@@ -22,6 +23,13 @@ public class TaskCollection {
 
   public Task<QuerySnapshot> findAll(String ownerId) {
     return collection.whereEqualTo(TaskModel.OWNER_ID_FIELD, ownerId).get();
+  }
+
+
+  public Task<QuerySnapshot> findAll(String ownerId, String orderByField, boolean isAscending) {
+    return collection.whereEqualTo(TaskModel.OWNER_ID_FIELD, ownerId)
+        .orderBy(orderByField, isAscending ? Query.Direction.ASCENDING : Query.Direction.DESCENDING)
+        .get();
   }
 
 
