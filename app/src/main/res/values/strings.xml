@@ -30,4 +30,6 @@
     <string name="label_description">Description</string>
     <string name="label_deadline">Deadline</string>
     <string name="label_title">Title</string>
+    <string name="label_button_edit_task">Edit Task</string>
+    <string name="placeholder_deadline">dd/MM/yyyy HH:mm</string>
 </resources>

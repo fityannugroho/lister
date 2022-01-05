@@ -10,7 +10,10 @@ import java.util.Date;
 import java.util.Locale;
 
 public class InputHelper {
-  public static final String DATE_FORMAT_HUMAN_US = "EE, MMM dd 'at' hh.mm a";
+  public static final String DATE_FORMAT_HUMAN_SHORT_US = "EE, MMM dd 'at' hh.mm a";
+  public static final String DATE_FORMAT_HUMAN_FULL_US = "EE, MMM dd, yyyy 'at' hh.mm a";
+  public static final String DATE_FORMAT_HUMAN_LONG_US = "EEEE, MMMM dd, yyyy 'at' hh.mm a";
+  public static final String DATE_FORMAT_FOR_TEXT_INPUT = "dd/MM/yyyy HH:mm";
 
 
   /**
@@ -41,7 +44,7 @@ public class InputHelper {
    */
   @NonNull
   public static String dateToString(Date date) {
-    return new SimpleDateFormat(DATE_FORMAT_HUMAN_US, Locale.US).format(date);
+    return new SimpleDateFormat(DATE_FORMAT_HUMAN_SHORT_US, Locale.US).format(date);
   }
 
 
@@ -59,6 +62,18 @@ public class InputHelper {
 
 
   /**
+   * Convert date to string for input field.
+   *
+   * @param date The date.
+   * @return The formatted date in string.
+   */
+  @NonNull
+  public static String dateToInput(Date date) {
+    return new SimpleDateFormat(DATE_FORMAT_FOR_TEXT_INPUT, Locale.ROOT).format(date);
+  }
+
+
+  /**
    * Convert date from human readable format (US) string date.
    *
    * @param strDate The suitable string date.
@@ -66,7 +81,7 @@ public class InputHelper {
    * @throws ParseException If string doesn't match the format.
    */
   public static Date stringToDate(String strDate) throws ParseException {
-    return new SimpleDateFormat(DATE_FORMAT_HUMAN_US, Locale.US).parse(strDate);
+    return new SimpleDateFormat(DATE_FORMAT_HUMAN_SHORT_US, Locale.US).parse(strDate);
   }
 
 
@@ -80,5 +95,17 @@ public class InputHelper {
    */
   public static Date stringToDate(String strDate, String format) throws ParseException {
     return new SimpleDateFormat(format, Locale.ROOT).parse(strDate);
+  }
+
+
+  /**
+   * Convert date from input string format.
+   *
+   * @param strDate The suitable string date.
+   * @return The date.
+   * @throws ParseException If string doesn't match the format.
+   */
+  public static Date inputToDate(String strDate) throws ParseException {
+    return new SimpleDateFormat(DATE_FORMAT_FOR_TEXT_INPUT, Locale.ROOT).parse(strDate);
   }
 }

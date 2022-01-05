@@ -2,7 +2,6 @@ package com.fityan.tugaskita.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,8 +45,6 @@ public class AddTaskActivity extends AppCompatActivity {
 
     /* When Deadline Input is clicked. */
     inputDeadline.setOnClickListener(view -> {
-      inputDeadline.setInputType(InputType.TYPE_NULL);
-
       /* Initialize date time picker. */
       DateTimePickerDialog dateTimePickerDialog = new DateTimePickerDialog(this, calendar,
           (year, month, dayOfMonth, hourOfDay, minute) -> {
@@ -59,12 +56,13 @@ public class AddTaskActivity extends AppCompatActivity {
             calendar.set(Calendar.MINUTE, minute);
 
             /* Format the date, then put to input field. */
-            inputDeadline.setText(InputHelper.dateToString(calendar.getTime()));
+            inputDeadline.setText(InputHelper.dateToInput(calendar.getTime()));
           });
 
       /* Show date time picker. */
       dateTimePickerDialog.show();
     });
+
 
     /* When Add Task Button is clicked. */
     btnAddTask.setOnClickListener(view -> {
@@ -73,7 +71,8 @@ public class AddTaskActivity extends AppCompatActivity {
         String title = InputHelper.getRequiredInput(inputTitle);
         String description = InputHelper.getRequiredInput(inputDescription);
         String strDeadline = InputHelper.getRequiredInput(inputDeadline);
-        Timestamp deadline = new Timestamp(InputHelper.stringToDate(strDeadline));
+
+        Timestamp deadline = new Timestamp(InputHelper.inputToDate(strDeadline));
 
         /* Add new task. */
         taskCollection.insert(title, description, deadline, user.getUid())
@@ -87,11 +86,10 @@ public class AddTaskActivity extends AppCompatActivity {
               Toast.makeText(this, "Failed to add task.", Toast.LENGTH_SHORT).show();
               Log.e("addTask", e.getMessage(), e);
             });
-
       } catch (NullPointerException e) {
         Log.i("inputValidation", e.getMessage(), e);
       } catch (ParseException e) {
-        e.printStackTrace();
+        Log.e("inputValidation", "Failed to parse deadline.", e);
       }
     });
   }
