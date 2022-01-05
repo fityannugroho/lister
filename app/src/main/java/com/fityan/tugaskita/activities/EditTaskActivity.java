@@ -1,8 +1,6 @@
 package com.fityan.tugaskita.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +16,7 @@ import com.fityan.tugaskita.helper.InputHelper;
 import com.fityan.tugaskita.models.TaskModel;
 import com.google.firebase.Timestamp;
 
+import java.text.ParseException;
 import java.util.Calendar;
 
 public class EditTaskActivity extends AppCompatActivity {
@@ -62,9 +61,6 @@ public class EditTaskActivity extends AppCompatActivity {
             calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
             calendar.set(Calendar.MINUTE, minute);
 
-            /* Set new deadline of task. */
-            taskModel.setDeadline(new Timestamp(calendar.getTime()));
-
             /* Format the date, then put to input field. */
             inputDeadline.setText(InputHelper.dateToInput(calendar.getTime()));
           });
@@ -80,16 +76,19 @@ public class EditTaskActivity extends AppCompatActivity {
       try {
         String title = InputHelper.getRequiredInput(inputTitle);
         String description = InputHelper.getRequiredInput(inputDescription);
+        String strDeadline = InputHelper.getRequiredInput(inputDeadline);
+
+        Timestamp deadline = new Timestamp(InputHelper.inputToDate(strDeadline));
 
         taskModel.setTitle(title);
         taskModel.setDescription(description);
+        taskModel.setDeadline(deadline);
 
         /* Edit new task. */
         taskCollection.update(taskModel).addOnCompleteListener(task -> {
           if (task.isSuccessful()) {
-            /* If success, go to Main Page. */
+            /* If success, finish this activity. */
             Toast.makeText(this, "Task successfully edited.", Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(this, MainActivity.class));
             finish();
           } else {
             Toast.makeText(this, "Failed to edit task.", Toast.LENGTH_SHORT).show();
@@ -98,6 +97,9 @@ public class EditTaskActivity extends AppCompatActivity {
         });
       } catch (NullPointerException e) {
         Log.i("inputValidation", e.getMessage(), e);
+      } catch (ParseException e) {
+        Log.e("inputValidation", "Failed to parse deadline.", e);
+        inputDeadline.setError("Invalid deadline format");
       }
     });
   }

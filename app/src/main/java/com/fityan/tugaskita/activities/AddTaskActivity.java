@@ -1,6 +1,5 @@
 package com.fityan.tugaskita.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -77,9 +76,8 @@ public class AddTaskActivity extends AppCompatActivity {
         /* Add new task. */
         taskCollection.insert(title, description, deadline, user.getUid())
             .addOnSuccessListener(documentReference -> {
-              /* If success, go to Main Page. */
+              /* If success, finish this activity. */
               Toast.makeText(this, "Task successfully added.", Toast.LENGTH_SHORT).show();
-              startActivity(new Intent(this, MainActivity.class));
               finish();
             })
             .addOnFailureListener(e -> {
@@ -90,6 +88,7 @@ public class AddTaskActivity extends AppCompatActivity {
         Log.i("inputValidation", e.getMessage(), e);
       } catch (ParseException e) {
         Log.e("inputValidation", "Failed to parse deadline.", e);
+        inputDeadline.setError("Invalid deadline format");
       }
     });
   }
