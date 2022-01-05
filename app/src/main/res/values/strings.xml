@@ -32,4 +32,8 @@
     <string name="label_title">Title</string>
     <string name="label_button_edit_task">Edit Task</string>
     <string name="placeholder_deadline">dd/MM/yyyy HH:mm</string>
+    <string name="label_button_share">Share</string>
+    <string name="label_share_task">Share to :</string>
+    <string name="label_write_access">Write Access</string>
+    <string name="label_delete_access">Delete Access</string>
 </resources>
