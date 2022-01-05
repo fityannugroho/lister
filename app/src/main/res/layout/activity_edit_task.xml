@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.AddTaskActivity"
+    tools:context=".activities.EditTaskActivity"
     >
 
     <!-- Title Field -->
@@ -79,15 +79,15 @@
             />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <!-- Add Task Button -->
+    <!-- Edit Task Button -->
     <Button
-        android:id="@+id/btnAddTask"
+        android:id="@+id/btnEditTask"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-        android:text="@string/label_button_add_task"
+        android:text="@string/label_button_edit_task"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

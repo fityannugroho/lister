@@ -153,6 +153,10 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   public void onEditItem(int position) {
+    /* Go to Edit Task Page with bring contact id. */
+    Intent intent = new Intent(this, EditTaskActivity.class);
+    intent.putExtra("taskId", tasks.get(position).getId());
+    startActivity(intent);
   }
 
 

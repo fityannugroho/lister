@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -19,6 +20,11 @@ public class TaskCollection {
 
 
   public TaskCollection() {}
+
+
+  public Task<DocumentSnapshot> findOne(String taskId) {
+    return collection.document(taskId).get();
+  }
 
 
   public Task<QuerySnapshot> findAll(String ownerId) {
