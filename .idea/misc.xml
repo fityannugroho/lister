@@ -6,7 +6,7 @@
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1037037037037037" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1037037037037037" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_add_task.xml" value="0.34673366834170855" />
-        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_detail_task.xml" value="0.264" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_detail_task.xml" value="0.4" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_edit_task.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_login.xml" value="0.264" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_main.xml" value="0.264" />
@@ -14,7 +14,8 @@
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_splash.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_update_profile.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_verify_email.xml" value="0.264" />
-        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/item_task.xml" value="0.1" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/item_shared_task.xml" value="0.4" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/item_task.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/share_dialog.xml" value="0.4" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/share_task_dialog.xml" value="0.1" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/menu/detail_task_menu.xml" value="0.4" />
