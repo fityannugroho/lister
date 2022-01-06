@@ -60,6 +60,16 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     rvTask = findViewById(R.id.rvTask);
     btnAddTask = findViewById(R.id.btnAdd);
 
+
+    /* Go to Update Profile Page if display name is unset, */
+    if (Objects.equals(user.getDisplayName(), "")) {
+      startActivity(new Intent(this, UpdateProfileActivity.class));
+    }
+
+    /* Show greetings on appearance. */
+    Toast.makeText(this, "Hello, " + user.getDisplayName() + " (" + user.getEmail() + ")",
+        Toast.LENGTH_SHORT).show();
+
     /* Retrieve tasks from database then displaying it. */
     loadTasks();
 
@@ -68,17 +78,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
       /* go to Add Task Page. */
       startActivity(new Intent(this, AddTaskActivity.class));
     });
-  }
-
-
-  @Override
-  protected void onStart() {
-    super.onStart();
-
-    /* Go to Update Profile Page if display name is unset, */
-    if (Objects.equals(user.getDisplayName(), "")) {
-      startActivity(new Intent(this, UpdateProfileActivity.class));
-    }
   }
 
 
