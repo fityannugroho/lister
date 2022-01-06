@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tugas Kita</string>
+    <string name="app_name">Lister</string>
     <string name="label_email">Email</string>
     <string name="label_password">Password</string>
     <string name="label_button_register">Register</string>
@@ -36,4 +36,5 @@
     <string name="label_share_task">Share to :</string>
     <string name="label_write_access">Write Access</string>
     <string name="label_delete_access">Delete Access</string>
+    <string name="label_lister_logo">Lister Logo</string>
 </resources>
