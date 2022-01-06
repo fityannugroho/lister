@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
 import com.fityan.tugaskita.collections.TaskCollection;
+import com.fityan.tugaskita.collections.UserCollection;
 import com.fityan.tugaskita.components.ShareTaskDialog;
 import com.fityan.tugaskita.helper.InputHelper;
 import com.fityan.tugaskita.models.TaskModel;
@@ -23,8 +24,14 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDialog.OnClickShareTaskDialogListener {
+  /* Authentication. */
+  private final FirebaseAuth auth = FirebaseAuth.getInstance();
+  private final FirebaseUser user = auth.getCurrentUser();
+
   /* Collections */
   private final TaskCollection taskCollection = new TaskCollection();
+  private final UserCollection userCollection = new UserCollection();
+
   /* View elements. */
   private TextView tvTitle, tvDescription, tvDeadline;
 
@@ -82,7 +89,22 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
 
   @Override
   public void onClickShareButton(String email, boolean isWritable, boolean isDeletable) {
-    /* TODO: Check if email is exists. */
-    Toast.makeText(this, "Email: " + email, Toast.LENGTH_SHORT).show();
+    /* Check if email is exists. */
+    userCollection.findByEmail(email).addOnSuccessListener(querySnapshot -> {
+      try {
+        /* If email doesn't exists. */
+        if (querySnapshot.isEmpty())
+          throw new Exception("Email " + email + " doesn't exists.");
+
+        /* If email doesn't exists. */
+        if (email.equals(user.getEmail()))
+          throw new Exception("Can't share the task to yourself.");
+
+        /* TODO: If email is valid, create new shared task. */
+        // code here
+      } catch (Exception e) {
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+      }
+    });
   }
 }
