@@ -1,6 +1,5 @@
 package com.fityan.tugaskita.activities;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -43,6 +42,7 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
   /* View elements. */
   private TextView tvTitle, tvDescription, tvDeadline;
   private Menu menu;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
