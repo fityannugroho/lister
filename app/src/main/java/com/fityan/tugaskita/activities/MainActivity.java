@@ -1,6 +1,7 @@
 package com.fityan.tugaskita.activities;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -138,24 +139,32 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   public void onDeleteItem(int position) {
+    DialogInterface.OnClickListener onDeleteBtnClickListener = (dialogInterface, i) -> {
+      String taskId = tasks.get(position).getId();
+
+      /* Delete task */
+      taskCollection.delete(taskId).addOnCompleteListener(task -> {
+        if (task.isSuccessful()) {
+          /* Get all related shared tasks. */
+          deleteRelatedSharedTasks(taskId);
+
+          /* Refresh the task list view */
+          onRestart();
+          Toast.makeText(this, "One task has been deleted.", Toast.LENGTH_SHORT).show();
+        } else {
+          Log.e("deleteTask", "Failed to delete task.", task.getException());
+          Toast.makeText(this, "Failed to delete task.", Toast.LENGTH_SHORT).show();
+        }
+      });
+
+      /* Close the dialog. */
+      dialogInterface.dismiss();
+    };
+
     /* Show confirmation dialog. */
     new AlertDialog.Builder(this).setTitle("Delete Task")
         .setMessage("Are you sure to delete this task?")
-        .setPositiveButton("Delete Task", (dialogInterface, i) -> {
-          /* Delete task */
-          taskCollection.delete(tasks.get(position).getId()).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-              /* Refresh the task list view */
-              onRestart();
-              Toast.makeText(this, "One task has been deleted.", Toast.LENGTH_SHORT).show();
-            } else {
-              Log.e("deleteTask", "Failed to delete task.", task.getException());
-              Toast.makeText(this, "Failed to delete task.", Toast.LENGTH_SHORT).show();
-            }
-          });
-          /* Close the dialog. */
-          dialogInterface.dismiss();
-        })
+        .setPositiveButton("Delete Task", onDeleteBtnClickListener)
         .setNegativeButton("Cancel", null)
         .show();
   }
@@ -221,5 +230,17 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         });
       }
     });
+  }
+
+
+  private void deleteRelatedSharedTasks(String taskId) {
+    sharedTaskCollection.findByTask(taskId).addOnSuccessListener(querySnapshot -> {
+      /* Delete all related shared task. */
+      for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+        sharedTaskCollection.delete(document.getId())
+            .addOnFailureListener(
+                e -> Log.e("deleteSharedTask", "Failed to delete shared task.", e));
+      }
+    }).addOnFailureListener(e -> Log.e("deleteSharedTask", "Failed to get shared tasks.", e));
   }
 }
