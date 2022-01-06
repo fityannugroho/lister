@@ -1,5 +1,6 @@
 package com.fityan.tugaskita.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -41,7 +42,7 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
 
   /* View elements. */
   private TextView tvTitle, tvDescription, tvDeadline;
-
+  private Menu menu;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -52,36 +53,40 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
     tvTitle = findViewById(R.id.tvTitle);
     tvDescription = findViewById(R.id.tvDescription);
     tvDeadline = findViewById(R.id.tvDeadline);
-  }
 
-
-  @Override
-  protected void onStart() {
-    super.onStart();
 
     /* Get the task. */
-    taskCollection.findOne(getIntent().getStringExtra("taskId"))
-        .addOnSuccessListener(documentSnapshot -> {
-          /* Set task. */
-          task.setId(documentSnapshot.getId());
-          task.setTitle(documentSnapshot.getString(TaskModel.TITLE_FIELD));
-          task.setDescription(documentSnapshot.getString(TaskModel.DESCRIPTION_FIELD));
-          task.setDeadline(documentSnapshot.getTimestamp(TaskModel.DEADLINE_FIELD));
+    String taskId = getIntent().getStringExtra("taskId");
+    taskCollection.findOne(taskId).addOnSuccessListener(documentSnapshot -> {
+      /* Set task. */
+      task.setId(documentSnapshot.getId());
+      task.setTitle(documentSnapshot.getString(TaskModel.TITLE_FIELD));
+      task.setDescription(documentSnapshot.getString(TaskModel.DESCRIPTION_FIELD));
+      task.setDeadline(documentSnapshot.getTimestamp(TaskModel.DEADLINE_FIELD));
+      task.setOwnerId(documentSnapshot.getString(TaskModel.OWNER_ID_FIELD));
 
-          String strDeadline = InputHelper.dateToString(
-              Objects.requireNonNull(task.getDeadline()).toDate(),
-              InputHelper.DATE_FORMAT_HUMAN_LONG_US, Locale.US);
+      String strDeadline = InputHelper.dateToString(
+          Objects.requireNonNull(task.getDeadline()).toDate(),
+          InputHelper.DATE_FORMAT_HUMAN_LONG_US, Locale.US);
 
-          /* Display the task data. */
-          tvTitle.setText(documentSnapshot.getString(TaskModel.TITLE_FIELD));
-          tvDescription.setText(documentSnapshot.getString(TaskModel.DESCRIPTION_FIELD));
-          tvDeadline.setText(strDeadline);
-        });
+      /* Display the task data. */
+      tvTitle.setText(documentSnapshot.getString(TaskModel.TITLE_FIELD));
+      tvDescription.setText(documentSnapshot.getString(TaskModel.DESCRIPTION_FIELD));
+      tvDeadline.setText(strDeadline);
+
+      /* Set sharing access. */
+      if (!task.getOwnerId().equals(user.getUid())) {
+        MenuItem item = menu.findItem(R.id.shareItem);
+        item.setVisible(false);
+      }
+    });
   }
 
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
+    this.menu = menu;
+
     MenuInflater inflater = getMenuInflater();
     inflater.inflate(R.menu.detail_task_menu, menu);
     return true;
