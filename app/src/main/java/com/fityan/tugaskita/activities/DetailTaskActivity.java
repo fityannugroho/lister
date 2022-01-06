@@ -1,6 +1,7 @@
 package com.fityan.tugaskita.activities;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,14 +12,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.collections.TaskCollection;
 import com.fityan.tugaskita.collections.UserCollection;
 import com.fityan.tugaskita.components.ShareTaskDialog;
 import com.fityan.tugaskita.helper.InputHelper;
+import com.fityan.tugaskita.models.SharedTaskModel;
 import com.fityan.tugaskita.models.TaskModel;
-import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -31,6 +34,10 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
   /* Collections */
   private final TaskCollection taskCollection = new TaskCollection();
   private final UserCollection userCollection = new UserCollection();
+  private final SharedTaskCollection sharedTaskCollection = new SharedTaskCollection();
+
+  /* Task */
+  private final TaskModel task = new TaskModel();
 
   /* View elements. */
   private TextView tvTitle, tvDescription, tvDeadline;
@@ -55,11 +62,17 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
     /* Get the task. */
     taskCollection.findOne(getIntent().getStringExtra("taskId"))
         .addOnSuccessListener(documentSnapshot -> {
-          /* Display the task data. */
-          Timestamp deadline = documentSnapshot.getTimestamp(TaskModel.DEADLINE_FIELD);
-          String strDeadline = InputHelper.dateToString(Objects.requireNonNull(deadline).toDate(),
+          /* Set task. */
+          task.setId(documentSnapshot.getId());
+          task.setTitle(documentSnapshot.getString(TaskModel.TITLE_FIELD));
+          task.setDescription(documentSnapshot.getString(TaskModel.DESCRIPTION_FIELD));
+          task.setDeadline(documentSnapshot.getTimestamp(TaskModel.DEADLINE_FIELD));
+
+          String strDeadline = InputHelper.dateToString(
+              Objects.requireNonNull(task.getDeadline()).toDate(),
               InputHelper.DATE_FORMAT_HUMAN_LONG_US, Locale.US);
 
+          /* Display the task data. */
           tvTitle.setText(documentSnapshot.getString(TaskModel.TITLE_FIELD));
           tvDescription.setText(documentSnapshot.getString(TaskModel.DESCRIPTION_FIELD));
           tvDeadline.setText(strDeadline);
@@ -100,8 +113,37 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
         if (email.equals(user.getEmail()))
           throw new Exception("Can't share the task to yourself.");
 
-        /* TODO: If email is valid, create new shared task. */
-        // code here
+        /* If more than one email found. */
+        if (querySnapshot.size() > 1)
+          throw new Exception("Multiple user with " + email
+              + " email is found. Please contact the admin to fix it.");
+
+        /* If this task has been shared with this user. */
+        sharedTaskCollection.findByTask(task.getId()).addOnSuccessListener(querySnapshot1 -> {
+          try {
+            String recipientId = querySnapshot.getDocuments().get(0).getId();
+
+            for (DocumentSnapshot document : querySnapshot1) {
+              if (Objects.equals(document.getString(SharedTaskModel.RECIPIENT_ID_FIELD),
+                  recipientId)) {
+                throw new Exception("This task has been shared with this user.");
+              }
+            }
+
+            /* If all requirement valid, create new shared task. */
+            sharedTaskCollection.insert(task.getId(), recipientId, isWritable, isDeletable)
+                .addOnSuccessListener(documentReference -> {
+                  /* If sharing is successful. */
+                  Toast.makeText(this, "Task shared successfully.", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                  Log.e("sharingTask", "Failed to sharing the task.", e);
+                  Toast.makeText(this, "Failed to sharing the task.", Toast.LENGTH_SHORT).show();
+                });
+          } catch (Exception e) {
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+          }
+        });
       } catch (Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
       }
