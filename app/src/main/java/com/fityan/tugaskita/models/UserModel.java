@@ -1,5 +1,9 @@
 package com.fityan.tugaskita.models;
 
+import androidx.annotation.NonNull;
+
+import com.google.firebase.auth.FirebaseUser;
+
 public class UserModel {
   public static final String ID_FIELD = "id";
   public static final String EMAIL_FIELD = "email";
@@ -11,6 +15,13 @@ public class UserModel {
 
 
   public UserModel() {}
+
+
+  public UserModel(@NonNull FirebaseUser user) {
+    this.id = user.getUid();
+    this.email = user.getEmail();
+    this.name = user.getDisplayName();
+  }
 
 
   public UserModel(String id, String email, String name) {

@@ -1,5 +1,6 @@
 package com.fityan.tugaskita.adapters;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,16 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.helper.InputHelper;
+import com.fityan.tugaskita.models.SharedTaskModel;
 import com.fityan.tugaskita.models.TaskModel;
+import com.fityan.tugaskita.models.UserModel;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHolder> {
   /**
@@ -27,9 +33,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
    */
   private final OnItemListener onItemListener;
 
+  /**
+   * Logged user.
+   */
+  private final UserModel loggedUser;
 
-  public TaskAdapter(ArrayList<TaskModel> tasks, OnItemListener onItemListener) {
+  /**
+   * The collection of shared task.
+   */
+  private final SharedTaskCollection sharedTaskCollection = new SharedTaskCollection();
+
+
+  public TaskAdapter(
+      ArrayList<TaskModel> tasks, UserModel loggedUser, OnItemListener onItemListener
+  ) {
     this.tasks = tasks;
+    this.loggedUser = loggedUser;
     this.onItemListener = onItemListener;
   }
 
@@ -55,6 +74,25 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
     /* Set display of task items. */
     holder.tvTitle.setText(task.getTitle());
     holder.tvDeadline.setText(InputHelper.dateToString(deadline));
+
+    /* Set modifier access. */
+    sharedTaskCollection.find(task.getId(), loggedUser.getId())
+        .addOnSuccessListener(querySnapshot -> {
+          if (querySnapshot.size() == 1) {
+            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+            boolean isWritable = Objects.requireNonNull(
+                document.getBoolean(SharedTaskModel.WRITABLE_FIELD));
+            boolean isDeletable = Objects.requireNonNull(
+                document.getBoolean(SharedTaskModel.DELETABLE_FIELD));
+
+            if (!isWritable)
+              holder.btnEdit.setVisibility(View.GONE);
+            if (!isDeletable)
+              holder.btnDelete.setVisibility(View.GONE);
+          }
+        })
+        .addOnFailureListener(
+            e -> Log.e("taskAccess", "Failed to set access modifier for task.", e));
   }
 
 

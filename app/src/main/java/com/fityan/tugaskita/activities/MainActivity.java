@@ -1,5 +1,6 @@
 package com.fityan.tugaskita.activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,8 +18,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.fityan.tugaskita.R;
 import com.fityan.tugaskita.adapters.TaskAdapter;
+import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.collections.TaskCollection;
+import com.fityan.tugaskita.models.SharedTaskModel;
 import com.fityan.tugaskita.models.TaskModel;
+import com.fityan.tugaskita.models.UserModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,11 +38,17 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   /* Collections */
   private final TaskCollection taskCollection = new TaskCollection();
+  private final SharedTaskCollection sharedTaskCollection = new SharedTaskCollection();
 
   /**
    * List of task.
    */
   private final ArrayList<TaskModel> tasks = new ArrayList<>();
+
+  /**
+   * Task adapter.
+   */
+  private TaskAdapter taskAdapter;
 
   /**
    * View element to displaying task list.
@@ -70,8 +80,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     Toast.makeText(this, "Hello, " + user.getDisplayName() + " (" + user.getEmail() + ")",
         Toast.LENGTH_SHORT).show();
 
-    /* Retrieve tasks from database then displaying it. */
-    loadTasks();
+    /* Initialize the task adapter. */
+    initTaskAdapter();
 
     /* When Add Button is clicked, */
     btnAddTask.setOnClickListener(view -> {
@@ -160,25 +170,56 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   }
 
 
+  /**
+   * Initialize task adapter & recycler view.
+   */
+  private void initTaskAdapter() {
+    /* Initialize task adapter. */
+    taskAdapter = new TaskAdapter(tasks, new UserModel(user), this);
+
+    /* Set the adapter to displaying task list. */
+    rvTask.setAdapter(taskAdapter);
+    rvTask.setLayoutManager(new LinearLayoutManager(this));
+    rvTask.setItemAnimator(new DefaultItemAnimator());
+
+    /* Retrieve tasks from database then displaying it. */
+    loadTasks();
+  }
+
+
+  @SuppressLint("NotifyDataSetChanged")
   private void loadTasks() {
     /* If tasks is not empty. */
     if (!tasks.isEmpty())
       tasks.clear();
 
-    /* Retrieve task data from database. */
-    taskCollection.findAll(user.getUid(), TaskModel.DEADLINE_FIELD, true)
-        .addOnSuccessListener(queryDocumentSnapshots -> {
-          for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-            tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
-                document.getString(TaskModel.DESCRIPTION_FIELD),
-                document.getTimestamp(TaskModel.DEADLINE_FIELD),
-                document.getString(TaskModel.OWNER_ID_FIELD)));
-          }
+    /* Retrieve own task data. */
+    taskCollection.findAll(user.getUid()).addOnSuccessListener(queryDocumentSnapshots -> {
+      for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
+        tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
+            document.getString(TaskModel.DESCRIPTION_FIELD),
+            document.getTimestamp(TaskModel.DEADLINE_FIELD),
+            document.getString(TaskModel.OWNER_ID_FIELD)));
+      }
+      // Refresh the adapter on data changed.
+      taskAdapter.notifyDataSetChanged();
+    });
 
-          /* Set the adapter to displaying task list. */
-          rvTask.setAdapter(new TaskAdapter(tasks, this));
-          rvTask.setLayoutManager(new LinearLayoutManager(this));
-          rvTask.setItemAnimator(new DefaultItemAnimator());
+    /* Retrieve shared task data. */
+    sharedTaskCollection.findByRecipient(user.getUid()).addOnSuccessListener(querySnapshot -> {
+      for (DocumentSnapshot sharedTask : querySnapshot.getDocuments()) {
+        String taskId = sharedTask.getString(SharedTaskModel.TASK_ID_FIELD);
+
+        /* Get the task. */
+        taskCollection.findOne(taskId).addOnSuccessListener(task -> {
+          tasks.add(new TaskModel(task.getId(), task.getString(TaskModel.TITLE_FIELD),
+              task.getString(TaskModel.DESCRIPTION_FIELD),
+              task.getTimestamp(TaskModel.DEADLINE_FIELD),
+              task.getString(TaskModel.OWNER_ID_FIELD)));
+          // Refresh the adapter on data changed.
+          taskAdapter.notifyDataSetChanged();
         });
+      }
+    });
   }
 }

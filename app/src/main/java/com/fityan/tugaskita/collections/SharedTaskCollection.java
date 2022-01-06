@@ -4,6 +4,7 @@ import com.fityan.tugaskita.models.SharedTaskModel;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
@@ -18,6 +19,18 @@ public class SharedTaskCollection {
 
 
   public SharedTaskCollection() {}
+
+
+  public Task<DocumentSnapshot> findOne(String sharedTaskId) {
+    return collection.document(sharedTaskId).get();
+  }
+
+
+  public Task<QuerySnapshot> find(String taskId, String recipientId) {
+    return collection.whereEqualTo(SharedTaskModel.TASK_ID_FIELD, taskId)
+        .whereEqualTo(SharedTaskModel.RECIPIENT_ID_FIELD, recipientId)
+        .get();
+  }
 
 
   public Task<QuerySnapshot> findByTask(String taskId) {
