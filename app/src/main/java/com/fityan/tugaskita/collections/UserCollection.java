@@ -23,7 +23,15 @@ public class UserCollection {
   }
 
 
-  public Task<Void> insert(String id, String email, String name) {
+  /**
+   * Update the existing document if id is already exist. Otherwise, add to new document.
+   *
+   * @param id    The id of user, that will be set as the id of document.
+   * @param email The email of user.
+   * @param name  The name of user.
+   * @return Task
+   */
+  public Task<Void> save(String id, String email, String name) {
     Map<String, Object> data = new HashMap<>();
     data.put(UserModel.EMAIL_FIELD, email);
     data.put(UserModel.NAME_FIELD, name);

@@ -75,10 +75,9 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   protected void onStart() {
     super.onStart();
 
-    if (Objects.requireNonNull(user.getDisplayName()).isEmpty()) {
-      /* Go to Update Profile Page if display name is unset, */
+    /* Go to Update Profile Page if display name is unset, */
+    if (Objects.equals(user.getDisplayName(), "")) {
       startActivity(new Intent(this, UpdateProfileActivity.class));
-      finish();
     }
   }
 

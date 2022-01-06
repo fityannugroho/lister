@@ -1,6 +1,5 @@
 package com.fityan.tugaskita.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -11,6 +10,7 @@ import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.collections.UserCollection;
 import com.fityan.tugaskita.helper.InputHelper;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -20,6 +20,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
   /* Authentication. */
   private final FirebaseAuth auth = FirebaseAuth.getInstance();
   private final FirebaseUser user = auth.getCurrentUser();
+
+  /* Collections */ UserCollection userCollection = new UserCollection();
 
   /* View elements. */
   private Button btnNext;
@@ -48,14 +50,24 @@ public class UpdateProfileActivity extends AppCompatActivity {
       try {
         String name = InputHelper.getRequiredInput(inputName);
 
-        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-            .setDisplayName(name).build();
+        UserProfileChangeRequest profileUpdates
+            = new UserProfileChangeRequest.Builder().setDisplayName(name).build();
 
+        /* Update the user profiles. */
         user.updateProfile(profileUpdates).addOnCompleteListener(task -> {
           if (task.isSuccessful()) {
-            /* Go to Login Page. */
-            startActivity(new Intent(this, LoginActivity.class));
-            finish();
+            /* Save to user collection. */
+            userCollection.save(user.getUid(), user.getEmail(), user.getDisplayName())
+                .addOnCompleteListener(task1 -> {
+                  if (task1.isSuccessful()) {
+                    finish();    // Finish this activity.
+                  } else {
+                    Toast.makeText(this, "Failed adding profile to collection.", Toast.LENGTH_SHORT)
+                        .show();
+                    Log.i("updateProfile", "Failed adding profile to collection.",
+                        task.getException());
+                  }
+                });
           } else {
             Toast.makeText(this, "Failed updating profile.", Toast.LENGTH_SHORT).show();
             Log.i("updateProfile", "Failed updating profile.", task.getException());

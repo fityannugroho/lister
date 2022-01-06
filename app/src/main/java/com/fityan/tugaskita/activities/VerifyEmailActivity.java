@@ -40,8 +40,8 @@ public class VerifyEmailActivity extends AppCompatActivity {
             if (!user.isEmailVerified())
               throw new FirebaseAuthEmailException("404", "Email is not verified");
 
-            /* If email is verified, go to Update Profile Page. */
-            startActivity(new Intent(this, UpdateProfileActivity.class));
+            /* If email is verified, go to Main Page. */
+            startActivity(new Intent(this, MainActivity.class));
             finish();
           } catch (FirebaseAuthEmailException e) {
             Toast.makeText(this, "Please verify your email first then try again.",
