@@ -72,6 +72,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     btnAddTask = findViewById(R.id.btnAdd);
 
 
+    /* Show greetings on appearance. */
+    if (!Objects.equals(user.getDisplayName(), "")){
+      Toast.makeText(this, "Hello, " + user.getDisplayName() + " (" + user.getEmail() + ")",
+          Toast.LENGTH_SHORT).show();
+    }
+
     /* Initialize the task adapter. */
     initTaskAdapter();
 
@@ -90,10 +96,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     /* Go to Update Profile Page if display name is unset, */
     if (Objects.equals(user.getDisplayName(), "")) {
       startActivity(new Intent(this, UpdateProfileActivity.class));
-    } else {
-      /* Show greetings on appearance. */
-      Toast.makeText(this, "Hello, " + user.getDisplayName() + " (" + user.getEmail() + ")",
-          Toast.LENGTH_SHORT).show();
+      finish();
     }
   }
 

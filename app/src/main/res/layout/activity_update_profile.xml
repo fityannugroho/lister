@@ -36,12 +36,12 @@
 
     <!-- Next Button -->
     <Button
-        android:id="@+id/btnNext"
+        android:id="@+id/btnUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
-        android:text="@string/label_button_next"
+        android:text="@string/label_button_update"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

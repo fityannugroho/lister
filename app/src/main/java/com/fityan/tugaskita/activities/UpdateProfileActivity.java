@@ -1,5 +1,6 @@
 package com.fityan.tugaskita.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -24,7 +25,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
   /* Collections */ UserCollection userCollection = new UserCollection();
 
   /* View elements. */
-  private Button btnNext;
+  private Button btnUpdate;
   private EditText inputName;
 
 
@@ -34,7 +35,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
     setContentView(R.layout.activity_update_profile);
 
     /* Initialize view elements. */
-    btnNext = findViewById(R.id.btnNext);
+    btnUpdate = findViewById(R.id.btnUpdate);
     inputName = findViewById(R.id.inputName);
 
     /* Customize action bar. */
@@ -46,7 +47,7 @@ public class UpdateProfileActivity extends AppCompatActivity {
 
 
     /* When Next Button is clicked. */
-    btnNext.setOnClickListener(view -> {
+    btnUpdate.setOnClickListener(view -> {
       try {
         String name = InputHelper.getRequiredInput(inputName);
 
@@ -60,6 +61,8 @@ public class UpdateProfileActivity extends AppCompatActivity {
             userCollection.save(user.getUid(), user.getEmail(), user.getDisplayName())
                 .addOnCompleteListener(task1 -> {
                   if (task1.isSuccessful()) {
+                    /* Go to main page. */
+                    startActivity(new Intent(this, MainActivity.class));
                     finish();    // Finish this activity.
                   } else {
                     Toast.makeText(this, "Failed adding profile to collection.", Toast.LENGTH_SHORT)
