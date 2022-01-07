@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
 
     /* Show greetings on appearance. */
-    if (!Objects.equals(user.getDisplayName(), "")){
+    if (!Objects.equals(user.getDisplayName(), "")) {
       Toast.makeText(this, "Hello, " + user.getDisplayName() + " (" + user.getEmail() + ")",
           Toast.LENGTH_SHORT).show();
     }
