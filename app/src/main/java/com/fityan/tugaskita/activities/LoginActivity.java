@@ -54,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
     /* When Forgot Password Button is clicked. */
     btnForgotPassword.setOnClickListener(view -> {
       /* TODO: go to Forgot Password Page. */
+      startActivity(new Intent(this, ForgotPasswordActivity.class));
     });
 
 

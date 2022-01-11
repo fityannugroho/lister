@@ -37,4 +37,6 @@
     <string name="label_write_access">Write Access</string>
     <string name="label_delete_access">Delete Access</string>
     <string name="label_lister_logo">Lister Logo</string>
+    <string name="label_button_send">Send Request</string>
+    <string name="label_button_sending">Sending…</string>
 </resources>
