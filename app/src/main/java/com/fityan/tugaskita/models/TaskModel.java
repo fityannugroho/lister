@@ -1,6 +1,7 @@
 package com.fityan.tugaskita.models;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class TaskModel {
   public static final String DEADLINE_FIELD = "deadline";
@@ -21,11 +22,16 @@ public class TaskModel {
   public TaskModel(
       String id, String title, String description, Timestamp deadline, String ownerId
   ) {
-    this.id = id;
-    this.title = title;
-    this.description = description;
-    this.deadline = deadline;
+    this.id = id; this.title = title; this.description = description; this.deadline = deadline;
     this.ownerId = ownerId;
+  }
+
+
+  public TaskModel(DocumentSnapshot task) {
+    this.id = task.getId(); this.title = task.getString(TaskModel.TITLE_FIELD);
+    this.description = task.getString(TaskModel.DESCRIPTION_FIELD);
+    this.deadline = task.getTimestamp(TaskModel.DEADLINE_FIELD);
+    this.ownerId = task.getString(TaskModel.OWNER_ID_FIELD);
   }
 
 

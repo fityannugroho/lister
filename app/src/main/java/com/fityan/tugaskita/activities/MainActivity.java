@@ -211,15 +211,11 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     /* Retrieve own task data. */
     taskCollection.findAll(user.getUid()).addOnSuccessListener(queryDocumentSnapshots -> {
       for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-        TaskModel newTask = new TaskModel(document.getId(),
-            document.getString(TaskModel.TITLE_FIELD),
-            document.getString(TaskModel.DESCRIPTION_FIELD),
-            document.getTimestamp(TaskModel.DEADLINE_FIELD),
-            document.getString(TaskModel.OWNER_ID_FIELD));
+        TaskModel task = new TaskModel(document);
 
         /* Add the task to list, then refresh the adapter on data changed. */
-        if (tasks.add(newTask))
-          taskAdapter.notifyItemInserted(tasks.indexOf(newTask));
+        if (tasks.add(task))
+          taskAdapter.notifyItemInserted(tasks.indexOf(task));
       }
     });
 
@@ -229,15 +225,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         String taskId = sharedTask.getString(SharedTaskModel.TASK_ID_FIELD);
 
         /* Get the task. */
-        taskCollection.findOne(taskId).addOnSuccessListener(task -> {
-          TaskModel newTask = new TaskModel(task.getId(), task.getString(TaskModel.TITLE_FIELD),
-              task.getString(TaskModel.DESCRIPTION_FIELD),
-              task.getTimestamp(TaskModel.DEADLINE_FIELD),
-              task.getString(TaskModel.OWNER_ID_FIELD));
+        taskCollection.findOne(taskId).addOnSuccessListener(documentSnapshot -> {
+          TaskModel task = new TaskModel(documentSnapshot);
 
           /* Add the task to list, then refresh the adapter on data changed. */
-          if (tasks.add(newTask))
-            taskAdapter.notifyItemInserted(tasks.indexOf(newTask));
+          if (tasks.add(task))
+            taskAdapter.notifyItemInserted(tasks.indexOf(task));
         });
       }
     });
