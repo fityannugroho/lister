@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,7 +25,6 @@ import com.fityan.tugaskita.collections.TaskCollection;
 import com.fityan.tugaskita.models.SharedTaskModel;
 import com.fityan.tugaskita.models.TaskModel;
 import com.fityan.tugaskita.models.UserModel;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -56,36 +56,25 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
    */
   private RecyclerView rvTask;
 
-  /**
-   * View element to navigate to add task page.
-   */
-  private FloatingActionButton btnAddTask;
+  /* Text Views. */
+  private TextView tvUserName;
 
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
 
     /* Initialize view elements. */
-    rvTask = findViewById(R.id.rvTask);
-    btnAddTask = findViewById(R.id.btnAdd);
+    rvTask = findViewById(R.id.rvTask); tvUserName = findViewById(R.id.tvUserName);
 
 
     /* Show greetings on appearance. */
     if (!Objects.equals(user.getDisplayName(), "")) {
-      Toast.makeText(this, "Hello, " + user.getDisplayName() + " (" + user.getEmail() + ")",
-          Toast.LENGTH_SHORT).show();
+      tvUserName.setText(user.getDisplayName());
     }
 
     /* Initialize the task adapter. */
     initTaskAdapter();
-
-    /* When Add Button is clicked, */
-    btnAddTask.setOnClickListener(view -> {
-      /* go to Add Task Page. */
-      startActivity(new Intent(this, AddTaskActivity.class));
-    });
   }
 
 
@@ -118,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    /* If Add Task Item is selected. */
+    if (item.getItemId() == R.id.addTaskItem) {
+      /* go to Add Task Page. */
+      startActivity(new Intent(this, AddTaskActivity.class));
+    }
+
     /* If Logout Item is selected. */
     if (item.getItemId() == R.id.logoutItem) {
       /* Show confirmation dialog. */

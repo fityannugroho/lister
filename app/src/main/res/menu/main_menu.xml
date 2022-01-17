@@ -3,6 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/addTaskItem"
+        android:icon="@drawable/ic_add_task_24"
+        android:title="@string/label_button_add_task"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/logoutItem"
         android:title="@string/label_button_logout"
         app:showAsAction="withText" />

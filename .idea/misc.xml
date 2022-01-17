@@ -4,13 +4,14 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1037037037037037" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/drawable/ic_add_task_32.xml" value="0.26614583333333336" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1037037037037037" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_add_task.xml" value="0.34673366834170855" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_detail_task.xml" value="0.4" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_edit_task.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_forgot_password.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_login.xml" value="0.264" />
-        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_main.xml" value="0.4" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_splash.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_update_profile.xml" value="0.25" />
@@ -20,7 +21,7 @@
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/share_dialog.xml" value="0.4" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/share_task_dialog.xml" value="0.1" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/menu/detail_task_menu.xml" value="0.4" />
-        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/menu/main_menu.xml" value="0.1" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/menu/main_menu.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.1037037037037037" />
       </map>
     </option>
