@@ -62,10 +62,12 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState); setContentView(R.layout.activity_main);
+    super.onCreate(savedInstanceState);
+    setContentView(R.layout.activity_main);
 
     /* Initialize view elements. */
-    rvTask = findViewById(R.id.rvTask); tvUserName = findViewById(R.id.tvUserName);
+    rvTask = findViewById(R.id.rvTask);
+    tvUserName = findViewById(R.id.tvUserName);
 
 
     /* Show greetings on appearance. */
@@ -205,7 +207,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   private void loadTasks() {
     /* If tasks is not empty. */
     if (!tasks.isEmpty()) {
-      tasks.clear(); taskAdapter.notifyDataSetChanged();
+      tasks.clear();
+      taskAdapter.notifyDataSetChanged();
     }
 
     /* Retrieve own task data. */
