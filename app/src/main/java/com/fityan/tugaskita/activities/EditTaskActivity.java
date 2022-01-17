@@ -55,12 +55,7 @@ public class EditTaskActivity extends AppCompatActivity {
       DateTimePickerDialog dateTimePickerDialog = new DateTimePickerDialog(this, calendar,
           (year, month, dayOfMonth, hourOfDay, minute) -> {
             /* Set calendar with deadline input. */
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.MONTH, month);
-            calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            calendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
-            calendar.set(Calendar.MINUTE, minute);
-
+            calendar.set(year, month, dayOfMonth, hourOfDay, minute);
             /* Format the date, then put to input field. */
             inputDeadline.setText(InputHelper.dateToInput(calendar.getTime()));
           });
@@ -77,7 +72,6 @@ public class EditTaskActivity extends AppCompatActivity {
         String title = InputHelper.getRequiredInput(inputTitle);
         String description = InputHelper.getRequiredInput(inputDescription);
         String strDeadline = InputHelper.getRequiredInput(inputDeadline);
-
         Timestamp deadline = new Timestamp(InputHelper.inputToDate(strDeadline));
 
         taskModel.setTitle(title);
@@ -112,11 +106,8 @@ public class EditTaskActivity extends AppCompatActivity {
     /* Get the task. */
     taskCollection.findOne(getIntent().getStringExtra("taskId"))
         .addOnSuccessListener(documentSnapshot -> {
-          taskModel = new TaskModel(documentSnapshot.getId(),
-              documentSnapshot.getString(TaskModel.TITLE_FIELD),
-              documentSnapshot.getString(TaskModel.DESCRIPTION_FIELD),
-              documentSnapshot.getTimestamp(TaskModel.DEADLINE_FIELD),
-              documentSnapshot.getString(TaskModel.OWNER_ID_FIELD));
+          /* Initialize task. */
+          taskModel = new TaskModel(documentSnapshot);
 
           /* Set calendar to deadline value. */
           calendar.setTime(taskModel.getDeadline().toDate());
