@@ -20,7 +20,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Objects;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHolder> {
   /**
@@ -68,31 +67,35 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
   public void onBindViewHolder(
       @NonNull TaskListViewHolder holder, int position
   ) {
-    TaskModel task = tasks.get(position);
-    Date deadline = task.getDeadline().toDate();
+    TaskModel task = tasks.get(position); Date deadline = task.getDeadline().toDate();
 
     /* Set display of task items. */
     holder.tvTitle.setText(task.getTitle());
     holder.tvDeadline.setText(InputHelper.dateToString(deadline));
 
     /* Set modifier access. */
-    sharedTaskCollection.find(task.getId(), loggedUser.getId())
-        .addOnSuccessListener(querySnapshot -> {
-          if (querySnapshot.size() == 1) {
-            DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-            boolean isWritable = Objects.requireNonNull(
-                document.getBoolean(SharedTaskModel.WRITABLE_FIELD));
-            boolean isDeletable = Objects.requireNonNull(
-                document.getBoolean(SharedTaskModel.DELETABLE_FIELD));
+    if (task.getOwnerId().equals(loggedUser.getId())) {
+      /* Full access is granted to task owner. */
+      holder.btnEdit.setVisibility(View.VISIBLE); holder.btnDelete.setVisibility(View.VISIBLE);
+    } else {
+      /* Set modifier access for shared task. */
+      sharedTaskCollection.find(task.getId(), loggedUser.getId())
+          .addOnSuccessListener(querySnapshot -> {
+            if (querySnapshot.size() == 1) {
+              DocumentSnapshot document = querySnapshot.getDocuments().get(0);
+              Boolean writable = document.getBoolean(SharedTaskModel.WRITABLE_FIELD);
+              Boolean deletable = document.getBoolean(SharedTaskModel.DELETABLE_FIELD);
 
-            if (!isWritable)
-              holder.btnEdit.setVisibility(View.GONE);
-            if (!isDeletable)
-              holder.btnDelete.setVisibility(View.GONE);
-          }
-        })
-        .addOnFailureListener(
-            e -> Log.e("taskAccess", "Failed to set access modifier for task.", e));
+              boolean isWritable = writable != null && writable;
+              boolean isDeletable = deletable != null && deletable;
+
+              if (isWritable)
+                holder.btnEdit.setVisibility(View.VISIBLE); if (isDeletable)
+                holder.btnDelete.setVisibility(View.VISIBLE);
+            }
+          })
+          .addOnFailureListener(e -> Log.e("taskAccess", e.getMessage(), e));
+    }
   }
 
 

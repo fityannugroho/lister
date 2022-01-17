@@ -151,14 +151,15 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
         if (task.isSuccessful()) {
           /* Get all related shared tasks. */
           deleteRelatedSharedTasks(taskId);
-
+          /* Remove task from list. */
+          tasks.remove(position);
           /* Refresh the task list view */
-          onRestart();
+          taskAdapter.notifyItemRemoved(position);
           Toast.makeText(this, "One task has been deleted.", Toast.LENGTH_SHORT).show();
-        } else {
-          Log.e("deleteTask", "Failed to delete task.", task.getException());
-          Toast.makeText(this, "Failed to delete task.", Toast.LENGTH_SHORT).show();
         }
+      }).addOnFailureListener(e -> {
+        Toast.makeText(this, "Failed to delete task.", Toast.LENGTH_SHORT).show();
+        Log.e("deleteTask", e.getMessage(), e);
       });
 
       /* Close the dialog. */
@@ -203,19 +204,23 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   @SuppressLint("NotifyDataSetChanged")
   private void loadTasks() {
     /* If tasks is not empty. */
-    if (!tasks.isEmpty())
-      tasks.clear();
+    if (!tasks.isEmpty()) {
+      tasks.clear(); taskAdapter.notifyDataSetChanged();
+    }
 
     /* Retrieve own task data. */
     taskCollection.findAll(user.getUid()).addOnSuccessListener(queryDocumentSnapshots -> {
       for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-        tasks.add(new TaskModel(document.getId(), document.getString(TaskModel.TITLE_FIELD),
+        TaskModel newTask = new TaskModel(document.getId(),
+            document.getString(TaskModel.TITLE_FIELD),
             document.getString(TaskModel.DESCRIPTION_FIELD),
             document.getTimestamp(TaskModel.DEADLINE_FIELD),
-            document.getString(TaskModel.OWNER_ID_FIELD)));
+            document.getString(TaskModel.OWNER_ID_FIELD));
+
+        /* Add the task to list, then refresh the adapter on data changed. */
+        if (tasks.add(newTask))
+          taskAdapter.notifyItemInserted(tasks.indexOf(newTask));
       }
-      // Refresh the adapter on data changed.
-      taskAdapter.notifyDataSetChanged();
     });
 
     /* Retrieve shared task data. */
@@ -225,12 +230,14 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
         /* Get the task. */
         taskCollection.findOne(taskId).addOnSuccessListener(task -> {
-          tasks.add(new TaskModel(task.getId(), task.getString(TaskModel.TITLE_FIELD),
+          TaskModel newTask = new TaskModel(task.getId(), task.getString(TaskModel.TITLE_FIELD),
               task.getString(TaskModel.DESCRIPTION_FIELD),
               task.getTimestamp(TaskModel.DEADLINE_FIELD),
-              task.getString(TaskModel.OWNER_ID_FIELD)));
-          // Refresh the adapter on data changed.
-          taskAdapter.notifyDataSetChanged();
+              task.getString(TaskModel.OWNER_ID_FIELD));
+
+          /* Add the task to list, then refresh the adapter on data changed. */
+          if (tasks.add(newTask))
+            taskAdapter.notifyItemInserted(tasks.indexOf(newTask));
         });
       }
     });
@@ -242,9 +249,8 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
       /* Delete all related shared task. */
       for (DocumentSnapshot document : querySnapshot.getDocuments()) {
         sharedTaskCollection.delete(document.getId())
-            .addOnFailureListener(
-                e -> Log.e("deleteSharedTask", "Failed to delete shared task.", e));
+            .addOnFailureListener(e -> Log.e("deleteSharedTask", e.getMessage(), e));
       }
-    }).addOnFailureListener(e -> Log.e("deleteSharedTask", "Failed to get shared tasks.", e));
+    }).addOnFailureListener(e -> Log.e("deleteSharedTask", e.getMessage(), e));
   }
 }
