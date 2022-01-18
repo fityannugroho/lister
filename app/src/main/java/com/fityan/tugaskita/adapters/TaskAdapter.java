@@ -16,7 +16,6 @@ import com.fityan.tugaskita.helper.InputHelper;
 import com.fityan.tugaskita.models.SharedTaskModel;
 import com.fityan.tugaskita.models.TaskModel;
 import com.fityan.tugaskita.models.UserModel;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -67,7 +66,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
   public void onBindViewHolder(
       @NonNull TaskListViewHolder holder, int position
   ) {
-    TaskModel task = tasks.get(position); Date deadline = task.getDeadline().toDate();
+    TaskModel task = tasks.get(position);
+    Date deadline = task.getDeadline().toDate();
 
     /* Set display of task items. */
     holder.tvTitle.setText(task.getTitle());
@@ -76,21 +76,18 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
     /* Set modifier access. */
     if (task.getOwnerId().equals(loggedUser.getId())) {
       /* Full access is granted to task owner. */
-      holder.btnEdit.setVisibility(View.VISIBLE); holder.btnDelete.setVisibility(View.VISIBLE);
+      holder.btnEdit.setVisibility(View.VISIBLE);
+      holder.btnDelete.setVisibility(View.VISIBLE);
     } else {
       /* Set modifier access for shared task. */
       sharedTaskCollection.find(task.getId(), loggedUser.getId())
           .addOnSuccessListener(querySnapshot -> {
             if (querySnapshot.size() == 1) {
-              DocumentSnapshot document = querySnapshot.getDocuments().get(0);
-              Boolean writable = document.getBoolean(SharedTaskModel.WRITABLE_FIELD);
-              Boolean deletable = document.getBoolean(SharedTaskModel.DELETABLE_FIELD);
+              SharedTaskModel sharedTask = new SharedTaskModel(querySnapshot.getDocuments().get(0));
 
-              boolean isWritable = writable != null && writable;
-              boolean isDeletable = deletable != null && deletable;
-
-              if (isWritable)
-                holder.btnEdit.setVisibility(View.VISIBLE); if (isDeletable)
+              if (sharedTask.isWritable())
+                holder.btnEdit.setVisibility(View.VISIBLE);
+              if (sharedTask.isDeletable())
                 holder.btnDelete.setVisibility(View.VISIBLE);
             }
           })
