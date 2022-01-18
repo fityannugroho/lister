@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
@@ -34,13 +33,6 @@ public class ForgotPasswordActivity extends AppCompatActivity {
     btnSend = findViewById(R.id.btnSend);
     inputEmail = findViewById(R.id.inputEmail);
 
-
-    /* Customize action bar. */
-    try {
-      customizeActionBar();
-    } catch (NullPointerException e) {
-      Log.i("actionBar", e.getMessage(), e);
-    }
 
     /* When Send Request Button is clicked. */
     btnSend.setOnClickListener(view -> {
@@ -78,19 +70,5 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         Log.e("inputValidation", e.getMessage(), e);
       }
     });
-  }
-
-
-  /**
-   * Customize the action bar for this activity here.
-   */
-  private void customizeActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-
-    if (actionBar == null)
-      throw new NullPointerException("There are no action bar in this activity.");
-
-    /* Set the title of action bar. */
-    actionBar.setTitle("Forgot Password");
   }
 }

@@ -5,10 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.helper.ActivityHelper;
 
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
@@ -18,8 +18,8 @@ public class SplashActivity extends AppCompatActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_splash);
 
-    /* Customize action bar. */
-    customizeActionBar();
+    // Hide the action bar.
+    ActivityHelper.hideActionBar(this);
 
     /* Initialize handler */
     Handler handler = new Handler();
@@ -32,19 +32,5 @@ public class SplashActivity extends AppCompatActivity {
       /* Stop this splash activity */
       finish();
     }, 1000);
-  }
-
-
-  /**
-   * Customize the action bar for this activity here.
-   */
-  private void customizeActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-
-    if (actionBar == null)
-      throw new NullPointerException("There are no action bar in this activity.");
-
-    /* Hide the action bar. */
-    actionBar.hide();
   }
 }

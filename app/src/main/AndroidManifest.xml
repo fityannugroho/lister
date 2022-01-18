@@ -12,18 +12,22 @@
         <activity
             android:name=".activities.ForgotPasswordActivity"
             android:exported="false"
+            android:label="Forgot Password"
             android:parentActivityName=".activities.LoginActivity" />
         <activity
             android:name=".activities.DetailTaskActivity"
             android:exported="false"
+            android:label="Detail Task"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.EditTaskActivity"
             android:exported="false"
+            android:label="Edit Task"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.AddTaskActivity"
             android:exported="false"
+            android:label="Add Task"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.UpdateProfileActivity"

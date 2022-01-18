@@ -7,10 +7,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.helper.ActivityHelper;
 import com.fityan.tugaskita.helper.InputHelper;
 import com.fityan.tugaskita.validation.EmailValidation;
 import com.fityan.tugaskita.validation.EmailValidationException;
@@ -42,18 +42,13 @@ public class LoginActivity extends AppCompatActivity {
     inputEmail = findViewById(R.id.inputEmail);
     inputPassword = findViewById(R.id.inputPassword);
 
-
-    /* Customize action bar. */
-    try {
-      customizeActionBar();
-    } catch (NullPointerException e) {
-      Log.i("actionBar", e.getMessage(), e);
-    }
+    // Hide the action bar.
+    ActivityHelper.hideActionBar(this);
 
 
     /* When Forgot Password Button is clicked. */
     btnForgotPassword.setOnClickListener(view -> {
-      /* TODO: go to Forgot Password Page. */
+      // Go to Forgot Password Page.
       startActivity(new Intent(this, ForgotPasswordActivity.class));
     });
 
@@ -74,9 +69,8 @@ public class LoginActivity extends AppCompatActivity {
           try {
             authorizedUser(authResult.getUser());
           } catch (FirebaseAuthEmailException e) {
-            Toast
-                .makeText(this, "Please verify your email first then try again.", Toast.LENGTH_LONG)
-                .show();
+            Toast.makeText(this, "Please verify your email first then try again.",
+                Toast.LENGTH_LONG).show();
           } catch (FirebaseAuthInvalidUserException e) {
             Log.w("login", "User not found", e);
           }
@@ -86,9 +80,8 @@ public class LoginActivity extends AppCompatActivity {
             throw e;
           } catch (FirebaseAuthInvalidUserException | FirebaseAuthInvalidCredentialsException authException) {
             /* Display message if email or password is invalid. */
-            Toast
-                .makeText(this, "Login failed! Email or password may be wrong.", Toast.LENGTH_SHORT)
-                .show();
+            Toast.makeText(this, "Login failed! Email or password may be wrong.",
+                Toast.LENGTH_SHORT).show();
             Log.e("login", authException.getMessage(), authException);
           } catch (Exception exception) {
             Log.e("login", exception.getMessage(), exception);
@@ -127,20 +120,6 @@ public class LoginActivity extends AppCompatActivity {
     } catch (FirebaseAuthInvalidUserException e) {
       Log.w("login", "User not found", e);
     }
-  }
-
-
-  /**
-   * Customize the action bar for this activity here.
-   */
-  private void customizeActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-
-    if (actionBar == null)
-      throw new NullPointerException("There are no action bar in this activity.");
-
-    /* Hide the action bar. */
-    actionBar.hide();
   }
 
 

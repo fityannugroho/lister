@@ -6,10 +6,10 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.helper.ActivityHelper;
 import com.fityan.tugaskita.helper.InputHelper;
 import com.fityan.tugaskita.validation.EmailValidation;
 import com.fityan.tugaskita.validation.EmailValidationException;
@@ -41,12 +41,8 @@ public class RegisterActivity extends AppCompatActivity {
     inputPassword = findViewById(R.id.inputPassword);
 
 
-    /* Customize action bar. */
-    try {
-      customizeActionBar();
-    } catch (NullPointerException e) {
-      Log.i("actionBar", e.getMessage(), e);
-    }
+    // Hide the action bar.
+    ActivityHelper.hideActionBar(this);
 
 
     /* When Login Button is clicked. */
@@ -103,20 +99,6 @@ public class RegisterActivity extends AppCompatActivity {
         Log.i("inputValidation", e.getMessage(), e);
       }
     });
-  }
-
-
-  /**
-   * Customize the action bar for this activity here.
-   */
-  private void customizeActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-
-    if (actionBar == null)
-      throw new NullPointerException("There are no action bar in this activity.");
-
-    /* Hide the action bar. */
-    actionBar.hide();
   }
 
 

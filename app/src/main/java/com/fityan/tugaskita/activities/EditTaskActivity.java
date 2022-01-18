@@ -6,7 +6,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
@@ -39,14 +38,6 @@ public class EditTaskActivity extends AppCompatActivity {
     inputTitle = findViewById(R.id.inputTitle);
     inputDescription = findViewById(R.id.inputDescription);
     inputDeadline = findViewById(R.id.inputDeadline);
-
-
-    /* Customize action bar. */
-    try {
-      customizeActionBar();
-    } catch (NullPointerException e) {
-      Log.i("actionBar", e.getMessage(), e);
-    }
 
 
     /* When Deadline Input is clicked. */
@@ -117,19 +108,5 @@ public class EditTaskActivity extends AppCompatActivity {
           inputDescription.setText(taskModel.getDescription());
           inputDeadline.setText(InputHelper.dateToInput(taskModel.getDeadline().toDate()));
         });
-  }
-
-
-  /**
-   * Customize the action bar for this activity here.
-   */
-  private void customizeActionBar() {
-    ActionBar actionBar = getSupportActionBar();
-
-    if (actionBar == null)
-      throw new NullPointerException("There are no action bar in this activity.");
-
-    /* Set the title of action bar. */
-    actionBar.setTitle("Edit Task");
   }
 }
