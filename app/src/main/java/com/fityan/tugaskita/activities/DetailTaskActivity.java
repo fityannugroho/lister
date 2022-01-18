@@ -1,5 +1,6 @@
 package com.fityan.tugaskita.activities;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -10,8 +11,12 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.adapters.SharedTaskAdapter;
 import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.collections.TaskCollection;
 import com.fityan.tugaskita.collections.UserCollection;
@@ -23,10 +28,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
-public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDialog.OnClickShareTaskDialogListener {
+public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDialog.OnClickShareTaskDialogListener, SharedTaskAdapter.OnItemListener {
   /* Authentication. */
   private final FirebaseAuth auth = FirebaseAuth.getInstance();
   private final FirebaseUser user = auth.getCurrentUser();
@@ -39,9 +45,16 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
   /* Task */
   private final TaskModel task = new TaskModel();
 
-  /* View elements. */
+  // Shared task list.
+  private final ArrayList<SharedTaskModel> sharedTasks = new ArrayList<>();
+
+  // View elements.
   private TextView tvTitle, tvDescription, tvDeadline;
   private Menu menu;
+  private RecyclerView rvSharedTask;
+
+  // The adapter.
+  private SharedTaskAdapter sharedTaskAdapter;
 
 
   @Override
@@ -53,10 +66,12 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
     tvTitle = findViewById(R.id.tvTitle);
     tvDescription = findViewById(R.id.tvDescription);
     tvDeadline = findViewById(R.id.tvDeadline);
+    rvSharedTask = findViewById(R.id.rvSharedTask);
 
-
-    /* Get the task. */
+    // Get task id.
     String taskId = getIntent().getStringExtra("taskId");
+
+    // Get the task.
     taskCollection.findOne(taskId).addOnSuccessListener(documentSnapshot -> {
       /* Set task. */
       task.setId(documentSnapshot.getId());
@@ -79,7 +94,51 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
         MenuItem item = menu.findItem(R.id.shareItem);
         item.setVisible(false);
       }
+
+      // Initialize the shared task adapter.
+      initSharedTaskAdapter();
     });
+  }
+
+
+  @Override
+  protected void onRestart() {
+    super.onRestart();
+    loadSharedTasks();
+  }
+
+
+  private void initSharedTaskAdapter() {
+    // Initialize the shared task adapter.
+    sharedTaskAdapter = new SharedTaskAdapter(sharedTasks, this);
+
+    // Set the adapter to recycle view.
+    rvSharedTask.setAdapter(sharedTaskAdapter);
+    rvSharedTask.setLayoutManager(new LinearLayoutManager(this));
+    rvSharedTask.setItemAnimator(new DefaultItemAnimator());
+
+    // Retrieve shared tasks from database then displaying it.
+    loadSharedTasks();
+  }
+
+
+  @SuppressLint("NotifyDataSetChanged")
+  private void loadSharedTasks() {
+    // If tasks is not empty.
+    if (!sharedTasks.isEmpty()) {
+      sharedTasks.clear();
+      sharedTaskAdapter.notifyDataSetChanged();
+    }
+
+    sharedTaskCollection.findByTask(task.getId()).addOnSuccessListener(querySnapshot -> {
+      for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+        SharedTaskModel sharedTask = new SharedTaskModel(document);
+
+        // Add the shared task to list, then refresh the adapter on data changed.
+        if (sharedTasks.add(sharedTask))
+          sharedTaskAdapter.notifyItemInserted(sharedTasks.indexOf(sharedTask));
+      }
+    }).addOnFailureListener(e -> Log.e("getSharedTask", e.getMessage(), e));
   }
 
 
@@ -153,5 +212,11 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
       }
     });
+  }
+
+
+  @Override
+  public void onItemClick(int position) {
+    // TODO: Go to Modify Shared Task Page.
   }
 }
