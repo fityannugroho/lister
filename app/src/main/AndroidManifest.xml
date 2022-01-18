@@ -11,16 +11,20 @@
         android:theme="@style/Theme.TugasKita">
         <activity
             android:name=".activities.ForgotPasswordActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.LoginActivity" />
         <activity
             android:name=".activities.DetailTaskActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.EditTaskActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.AddTaskActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.UpdateProfileActivity"
             android:exported="false" />
