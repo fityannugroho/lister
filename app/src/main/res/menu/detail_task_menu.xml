@@ -6,6 +6,7 @@
         android:id="@+id/shareItem"
         android:icon="@drawable/ic_share_24"
         android:title="@string/label_button_share"
+        android:visible="false"
         app:showAsAction="ifRoom" />
 
 </menu>

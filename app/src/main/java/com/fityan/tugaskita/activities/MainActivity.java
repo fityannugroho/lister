@@ -33,6 +33,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements TaskAdapter.OnItemListener {
+  /**
+   * Key to transfer task id value using intent.
+   */
+  public static final String TASK_ID_KEY = "taskId";
+
   /* Authentication. */
   private final FirebaseAuth auth = FirebaseAuth.getInstance();
   private final FirebaseUser user = auth.getCurrentUser();
@@ -56,9 +61,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
    */
   private RecyclerView rvTask;
 
-  /* Text Views. */
-  private TextView tvUserName;
-
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
 
     /* Initialize view elements. */
     rvTask = findViewById(R.id.rvTask);
-    tvUserName = findViewById(R.id.tvUserName);
+    TextView tvUserName = findViewById(R.id.tvUserName);
 
 
     /* Show greetings on appearance. */
@@ -138,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   public void onItemClick(int position) {
     /* Go to Detail Task Page with bring task id. */
     Intent intent = new Intent(this, DetailTaskActivity.class);
-    intent.putExtra("taskId", tasks.get(position).getId());
+    intent.putExtra(TASK_ID_KEY, tasks.get(position).getId());
     startActivity(intent);
   }
 
@@ -181,7 +183,7 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   public void onEditItem(int position) {
     /* Go to Edit Task Page with bring task id. */
     Intent intent = new Intent(this, EditTaskActivity.class);
-    intent.putExtra("taskId", tasks.get(position).getId());
+    intent.putExtra(TASK_ID_KEY, tasks.get(position).getId());
     startActivity(intent);
   }
 

@@ -170,6 +170,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
         android:layout_marginTop="24dp"
         app:layout_constrainedHeight="true"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -184,7 +185,6 @@
             android:id="@+id/sharedTaskIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:contentDescription="@string/label_deadline"
             android:src="@drawable/ic_share_16"
             app:layout_constraintBottom_toBottomOf="@id/labelSharedTask"
@@ -207,18 +207,30 @@
             app:layout_constraintTop_toTopOf="parent"
             />
 
-        <!-- Shared Task List -->
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSharedTask"
-            android:layout_width="match_parent"
+        <!-- Value -->
+        <TextView
+            android:id="@+id/tvCountSharedTask"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:text="@string/value_count_shared_task"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/labelSharedTask"
-            app:layout_constraintVertical_bias="0"
+            />
+
+        <!-- Shared Task List -->
+        <Button
+            android:id="@+id/btnSeeSharedList"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="0dp"
+            android:text="@string/label_button_see_all"
+            android:visibility="gone"
+            android:textAllCaps="false"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

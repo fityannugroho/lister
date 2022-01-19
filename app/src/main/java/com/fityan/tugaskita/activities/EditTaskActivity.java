@@ -95,7 +95,7 @@ public class EditTaskActivity extends AppCompatActivity {
     super.onStart();
 
     /* Get the task. */
-    taskCollection.findOne(getIntent().getStringExtra("taskId"))
+    taskCollection.findOne(getIntent().getStringExtra(MainActivity.TASK_ID_KEY))
         .addOnSuccessListener(documentSnapshot -> {
           /* Initialize task. */
           taskModel = new TaskModel(documentSnapshot);
