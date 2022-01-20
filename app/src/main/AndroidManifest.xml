@@ -14,7 +14,7 @@
         <activity
             android:name=".activities.ManageSharedTaskActivity"
             android:exported="false"
-            android:label="Modify Access"
+            android:label="Manage Access"
             android:parentActivityName=".activities.SharedTaskListActivity"
             />
         <activity
