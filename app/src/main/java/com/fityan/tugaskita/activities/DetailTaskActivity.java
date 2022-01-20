@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.fityan.tugaskita.R;
-import com.fityan.tugaskita.adapters.SharedTaskAdapter;
 import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.collections.TaskCollection;
 import com.fityan.tugaskita.collections.UserCollection;
@@ -30,7 +29,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.Locale;
 import java.util.Objects;
 
-public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDialog.OnClickShareTaskDialogListener, SharedTaskAdapter.OnItemListener {
+public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDialog.OnClickShareTaskDialogListener {
   /* Authentication. */
   private final FirebaseAuth auth = FirebaseAuth.getInstance();
   private final FirebaseUser user = auth.getCurrentUser();
@@ -181,11 +180,5 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
       }
     });
-  }
-
-
-  @Override
-  public void onItemClick(int position) {
-    // TODO: Go to Modify Shared Task Page.
   }
 }
