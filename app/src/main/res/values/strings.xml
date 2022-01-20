@@ -46,4 +46,5 @@
     <string name="desc_img_read_access">Can Read</string>
     <string name="desc_img_write_access">Can Write</string>
     <string name="desc_img_delete_access">Can Delete</string>
+    <string name="label_button_remove_access">Remove Access</string>
 </resources>

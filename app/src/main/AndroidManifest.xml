@@ -12,9 +12,15 @@
         android:theme="@style/Theme.TugasKita"
         >
         <activity
+            android:name=".activities.ManageSharedTaskActivity"
+            android:exported="false"
+            android:label="Modify Access"
+            android:parentActivityName=".activities.SharedTaskListActivity"
+            />
+        <activity
             android:name=".activities.SharedTaskListActivity"
             android:exported="false"
-            android:label="Shared Task"
+            android:label="Shared List"
             android:parentActivityName=".activities.DetailTaskActivity"
             />
         <activity

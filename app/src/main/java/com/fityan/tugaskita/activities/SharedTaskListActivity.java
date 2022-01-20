@@ -19,6 +19,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import java.util.ArrayList;
 
 public class SharedTaskListActivity extends AppCompatActivity implements SharedTaskAdapter.OnItemListener {
+  /**
+   * Key to transfer value of shared task id using intent.
+   */
+  public static final String SHARED_TASK_ID_KEY = "sharedTaskId";
+
   // Shared task list.
   private final ArrayList<SharedTaskModel> sharedTasks = new ArrayList<>();
 
@@ -48,6 +53,13 @@ public class SharedTaskListActivity extends AppCompatActivity implements SharedT
 
     // Initialize the shared task adapter.
     initSharedTaskAdapter();
+  }
+
+
+  @Override
+  protected void onRestart() {
+    loadSharedTasks();
+    super.onRestart();
   }
 
 
@@ -94,6 +106,9 @@ public class SharedTaskListActivity extends AppCompatActivity implements SharedT
 
   @Override
   public void onItemClick(int position) {
-    // TODO: Go to Modify Shared Task Page.
+    // Go to Modify Shared Task Page.
+    Intent intent = new Intent(this, ManageSharedTaskActivity.class);
+    intent.putExtra(SHARED_TASK_ID_KEY, sharedTasks.get(position).getId());
+    startActivity(intent);
   }
 }
