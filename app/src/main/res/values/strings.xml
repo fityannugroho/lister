@@ -47,4 +47,5 @@
     <string name="desc_img_write_access">Can Write</string>
     <string name="desc_img_delete_access">Can Delete</string>
     <string name="label_button_remove_access">Remove Access</string>
+    <string name="text_empty_shared">This task has not been shared with anyone.</string>
 </resources>

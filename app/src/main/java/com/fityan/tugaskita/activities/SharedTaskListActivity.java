@@ -1,43 +1,30 @@
 package com.fityan.tugaskita.activities;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
 
 import com.fityan.tugaskita.R;
-import com.fityan.tugaskita.adapters.SharedTaskAdapter;
 import com.fityan.tugaskita.collections.SharedTaskCollection;
-import com.fityan.tugaskita.models.SharedTaskModel;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.fityan.tugaskita.fragments.EmptySharedTaskListFragment;
+import com.fityan.tugaskita.fragments.SharedTaskListFragment;
 
-import java.util.ArrayList;
-
-public class SharedTaskListActivity extends AppCompatActivity implements SharedTaskAdapter.OnItemListener {
+public class SharedTaskListActivity extends AppCompatActivity {
   /**
    * Key to transfer value of shared task id using intent.
    */
   public static final String SHARED_TASK_ID_KEY = "sharedTaskId";
 
-  // Shared task list.
-  private final ArrayList<SharedTaskModel> sharedTasks = new ArrayList<>();
-
   // Collections .
   private final SharedTaskCollection sharedTaskCollection = new SharedTaskCollection();
 
+  // The fragment manager.
+  private FragmentManager fragmentManager;
+
   // Task id.
   private String taskId;
-
-  // The adapter.
-  private SharedTaskAdapter sharedTaskAdapter;
-
-  // View elements.
-  private RecyclerView rvSharedTask;
 
 
   @Override
@@ -45,21 +32,23 @@ public class SharedTaskListActivity extends AppCompatActivity implements SharedT
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_shared_task_list);
 
-    // Initialize view elements.
-    rvSharedTask = findViewById(R.id.rvSharedTask);
-
     // Get the task id.
     taskId = getIntent().getStringExtra(MainActivity.TASK_ID_KEY);
 
-    // Initialize the shared task adapter.
-    initSharedTaskAdapter();
+    // Set fragment for first time.
+    if (savedInstanceState == null) {
+      fragmentManager = getSupportFragmentManager();
+      setFragmentContainerView();
+    }
   }
 
 
   @Override
-  protected void onRestart() {
-    loadSharedTasks();
-    super.onRestart();
+  protected void onResume() {
+    // Update the fragment when activity is resumed.
+    setFragmentContainerView();
+    // Call super method.
+    super.onResume();
   }
 
 
@@ -70,45 +59,24 @@ public class SharedTaskListActivity extends AppCompatActivity implements SharedT
   }
 
 
-  private void initSharedTaskAdapter() {
-    // Initialize the shared task adapter.
-    sharedTaskAdapter = new SharedTaskAdapter(sharedTasks, this);
-
-    // Set the adapter to recycle view.
-    rvSharedTask.setAdapter(sharedTaskAdapter);
-    rvSharedTask.setLayoutManager(new LinearLayoutManager(this));
-    rvSharedTask.setItemAnimator(new DefaultItemAnimator());
-
-    // Retrieve shared tasks from database then displaying it.
-    loadSharedTasks();
-  }
-
-
-  @SuppressLint("NotifyDataSetChanged")
-  private void loadSharedTasks() {
-    // If tasks is not empty.
-    if (!sharedTasks.isEmpty()) {
-      sharedTasks.clear();
-      sharedTaskAdapter.notifyDataSetChanged();
-    }
+  private void setFragmentContainerView() {
+    Bundle bundle = new Bundle();
+    bundle.putString(MainActivity.TASK_ID_KEY, taskId);
 
     sharedTaskCollection.findByTask(taskId).addOnSuccessListener(querySnapshot -> {
-      for (DocumentSnapshot document : querySnapshot.getDocuments()) {
-        SharedTaskModel sharedTask = new SharedTaskModel(document);
-
-        // Add the shared task to list, then refresh the adapter on data changed.
-        if (sharedTasks.add(sharedTask))
-          sharedTaskAdapter.notifyItemInserted(sharedTasks.indexOf(sharedTask));
+      if (querySnapshot.isEmpty()) {
+        // Load empty shared list fragment.
+        fragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
+            .replace(R.id.fragment_container_view, EmptySharedTaskListFragment.class, bundle)
+            .commit();
+      } else {
+        // Load shared list fragment.
+        fragmentManager.beginTransaction()
+            .setReorderingAllowed(true)
+            .replace(R.id.fragment_container_view, SharedTaskListFragment.class, bundle)
+            .commit();
       }
-    }).addOnFailureListener(e -> Log.e("getSharedTask", e.getMessage(), e));
-  }
-
-
-  @Override
-  public void onItemClick(int position) {
-    // Go to Modify Shared Task Page.
-    Intent intent = new Intent(this, ManageSharedTaskActivity.class);
-    intent.putExtra(SHARED_TASK_ID_KEY, sharedTasks.get(position).getId());
-    startActivity(intent);
+    });
   }
 }
