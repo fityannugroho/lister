@@ -3,6 +3,7 @@ package com.fityan.tugaskita.models;
 import androidx.annotation.NonNull;
 
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class UserModel {
   public static final String ID_FIELD = "id";
@@ -28,6 +29,13 @@ public class UserModel {
     this.id = id;
     this.email = email;
     this.name = name;
+  }
+
+
+  public UserModel(DocumentSnapshot user) {
+    this.id = user.getId();
+    this.name = user.getString(NAME_FIELD);
+    this.email = user.getString(EMAIL_FIELD);
   }
 
 
