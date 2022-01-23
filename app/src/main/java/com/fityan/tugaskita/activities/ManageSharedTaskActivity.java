@@ -44,8 +44,8 @@ public class ManageSharedTaskActivity extends AppCompatActivity {
     btnRemoveAccess = findViewById(R.id.btnRemoveAccess);
     tvEmail = findViewById(R.id.tvEmail);
     tvName = findViewById(R.id.tvName);
-    checkBoxWritable = findViewById(R.id.checkBoxWritable);
-    checkBoxDeletable = findViewById(R.id.checkBoxDeletable);
+    checkBoxWritable = findViewById(R.id.switchWritable);
+    checkBoxDeletable = findViewById(R.id.switchDeletable);
 
 
     // Get the shared task id & displaying it.

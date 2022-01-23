@@ -23,7 +23,7 @@ public class InputHelper {
    * @throws NullPointerException If value is empty.
    */
   @NonNull
-  public static String getRequiredInput(@NonNull EditText input) {
+  public static String getRequiredInput(@NonNull EditText input) throws NullPointerException {
     String value = input.getText().toString();
 
     if (value.isEmpty()) {

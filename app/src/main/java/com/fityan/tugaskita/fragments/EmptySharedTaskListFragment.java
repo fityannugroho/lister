@@ -1,5 +1,6 @@
 package com.fityan.tugaskita.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +13,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.activities.MainActivity;
+import com.fityan.tugaskita.activities.ShareTaskActivity;
 
 public class EmptySharedTaskListFragment extends Fragment {
+  // Task id.
+  private String taskId;
+
   // View elements.
-  private Button btnShared;
+  private Button btnShare;
 
 
   public EmptySharedTaskListFragment() {
     // Required empty public constructor
+  }
+
+
+  @Override
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+
+    taskId = requireArguments().getString(MainActivity.TASK_ID_KEY);
   }
 
 
@@ -35,12 +49,14 @@ public class EmptySharedTaskListFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     // Initialize view elements.
-    btnShared = view.findViewById(R.id.btnShared);
+    btnShare = view.findViewById(R.id.btnShare);
 
     // When Share Button is clicked.
-    btnShared.setOnClickListener(viewOnClick -> {
-      // TODO: Go to Share Task Page.
-      Toast.makeText(getContext(), "Go to share task page...", Toast.LENGTH_SHORT).show();
+    btnShare.setOnClickListener(viewOnClick -> {
+      // Go to Share Task Page.
+      Intent intent = new Intent(getActivity(), ShareTaskActivity.class);
+      intent.putExtra(MainActivity.TASK_ID_KEY, taskId);
+      startActivity(intent);
     });
 
     // Call super method.

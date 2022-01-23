@@ -2,14 +2,12 @@ package com.fityan.tugaskita.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,26 +15,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.fityan.tugaskita.R;
 import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.collections.TaskCollection;
-import com.fityan.tugaskita.collections.UserCollection;
-import com.fityan.tugaskita.components.ShareTaskDialog;
 import com.fityan.tugaskita.helper.InputHelper;
-import com.fityan.tugaskita.models.SharedTaskModel;
 import com.fityan.tugaskita.models.TaskModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Locale;
 import java.util.Objects;
 
-public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDialog.OnClickShareTaskDialogListener {
+public class DetailTaskActivity extends AppCompatActivity {
   /* Authentication. */
   private final FirebaseAuth auth = FirebaseAuth.getInstance();
   private final FirebaseUser user = auth.getCurrentUser();
 
   /* Collections */
   private final TaskCollection taskCollection = new TaskCollection();
-  private final UserCollection userCollection = new UserCollection();
   private final SharedTaskCollection sharedTaskCollection = new SharedTaskCollection();
 
   /* Task */
@@ -124,61 +117,12 @@ public class DetailTaskActivity extends AppCompatActivity implements ShareTaskDi
   public boolean onOptionsItemSelected(@NonNull MenuItem item) {
     /* If Share Item is selected. */
     if (item.getItemId() == R.id.shareItem) {
-      /* Show share task dialog. */
-      ShareTaskDialog shareTaskDialog = new ShareTaskDialog();
-      shareTaskDialog.show(getSupportFragmentManager(), "shareTaskDialog");
+      // Go to Share Task Activity.
+      Intent intent = new Intent(this, ShareTaskActivity.class);
+      intent.putExtra(MainActivity.TASK_ID_KEY, taskId);
+      startActivity(intent);
     }
+
     return super.onOptionsItemSelected(item);
-  }
-
-
-  @Override
-  public void onClickShareButton(String email, boolean isWritable, boolean isDeletable) {
-    /* Check if email is exists. */
-    userCollection.findByEmail(email).addOnSuccessListener(querySnapshot -> {
-      try {
-        /* If email doesn't exists. */
-        if (querySnapshot.isEmpty())
-          throw new Exception("Email " + email + " doesn't exists.");
-
-        /* If email doesn't exists. */
-        if (email.equals(user.getEmail()))
-          throw new Exception("Can't share the task to yourself.");
-
-        /* If more than one email found. */
-        if (querySnapshot.size() > 1)
-          throw new Exception("Multiple user with " + email
-              + " email is found. Please contact the admin to fix it.");
-
-        /* If this task has been shared with this user. */
-        sharedTaskCollection.findByTask(task.getId()).addOnSuccessListener(querySnapshot1 -> {
-          try {
-            String recipientId = querySnapshot.getDocuments().get(0).getId();
-
-            for (DocumentSnapshot document : querySnapshot1) {
-              if (Objects.equals(document.getString(SharedTaskModel.RECIPIENT_ID_FIELD),
-                  recipientId)) {
-                throw new Exception("This task has been shared with this user.");
-              }
-            }
-
-            /* If all requirement valid, create new shared task. */
-            sharedTaskCollection.insert(task.getId(), recipientId, isWritable, isDeletable)
-                .addOnSuccessListener(documentReference -> {
-                  /* If sharing is successful. */
-                  Toast.makeText(this, "Task shared successfully.", Toast.LENGTH_SHORT).show();
-                })
-                .addOnFailureListener(e -> {
-                  Log.e("sharingTask", "Failed to sharing the task.", e);
-                  Toast.makeText(this, "Failed to sharing the task.", Toast.LENGTH_SHORT).show();
-                });
-          } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-          }
-        });
-      } catch (Exception e) {
-        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-      }
-    });
   }
 }
