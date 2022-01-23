@@ -60,6 +60,42 @@ public class DetailTaskActivity extends AppCompatActivity {
     taskId = getIntent().getStringExtra(MainActivity.TASK_ID_KEY);
 
     // Get the task.
+    loadTask();
+  }
+
+
+  @Override
+  protected void onResume() {
+    loadTask();
+    super.onResume();
+  }
+
+
+  @Override
+  public boolean onCreateOptionsMenu(Menu menu) {
+    this.menu = menu;
+
+    MenuInflater inflater = getMenuInflater();
+    inflater.inflate(R.menu.detail_task_menu, menu);
+    return true;
+  }
+
+
+  @Override
+  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+    /* If Share Item is selected. */
+    if (item.getItemId() == R.id.shareItem) {
+      // Go to Share Task Activity.
+      Intent intent = new Intent(this, ShareTaskActivity.class);
+      intent.putExtra(MainActivity.TASK_ID_KEY, taskId);
+      startActivity(intent);
+    }
+
+    return super.onOptionsItemSelected(item);
+  }
+
+
+  private void loadTask() {
     taskCollection.findOne(taskId).addOnSuccessListener(documentSnapshot -> {
       /* Set task. */
       task.setId(documentSnapshot.getId());
@@ -100,29 +136,5 @@ public class DetailTaskActivity extends AppCompatActivity {
         tvCountSharedTask.setText(label.replace("null", String.valueOf(querySnapshot.size())));
       });
     });
-  }
-
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    this.menu = menu;
-
-    MenuInflater inflater = getMenuInflater();
-    inflater.inflate(R.menu.detail_task_menu, menu);
-    return true;
-  }
-
-
-  @Override
-  public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-    /* If Share Item is selected. */
-    if (item.getItemId() == R.id.shareItem) {
-      // Go to Share Task Activity.
-      Intent intent = new Intent(this, ShareTaskActivity.class);
-      intent.putExtra(MainActivity.TASK_ID_KEY, taskId);
-      startActivity(intent);
-    }
-
-    return super.onOptionsItemSelected(item);
   }
 }
