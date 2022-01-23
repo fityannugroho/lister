@@ -47,5 +47,7 @@
     <string name="desc_img_write_access">Can Write</string>
     <string name="desc_img_delete_access">Can Delete</string>
     <string name="label_button_remove_access">Remove Access</string>
-    <string name="text_empty_shared">This task has not been shared with anyone.</string>
+    <string name="text_empty_shared">This task has not been shared to anyone.</string>
+    <string name="helper_write_access">If enabled, the recipient can edit your task.</string>
+    <string name="helper_delete_access">If enabled, the recipient can delete your task.</string>
 </resources>

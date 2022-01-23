@@ -1,5 +1,7 @@
 package com.fityan.tugaskita.collections;
 
+import androidx.annotation.NonNull;
+
 import com.fityan.tugaskita.models.SharedTaskModel;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -51,6 +53,17 @@ public class SharedTaskCollection {
     data.put(SharedTaskModel.RECIPIENT_ID_FIELD, recipientId);
     data.put(SharedTaskModel.WRITABLE_FIELD, writable);
     data.put(SharedTaskModel.DELETABLE_FIELD, deletable);
+
+    return collection.add(data);
+  }
+
+
+  public Task<DocumentReference> insert(@NonNull SharedTaskModel newSharedTask) {
+    Map<String, Object> data = new HashMap<>();
+    data.put(SharedTaskModel.TASK_ID_FIELD, newSharedTask.getTaskId());
+    data.put(SharedTaskModel.RECIPIENT_ID_FIELD, newSharedTask.getRecipientId());
+    data.put(SharedTaskModel.WRITABLE_FIELD, newSharedTask.isWritable());
+    data.put(SharedTaskModel.DELETABLE_FIELD, newSharedTask.isDeletable());
 
     return collection.add(data);
   }
