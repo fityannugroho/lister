@@ -13,17 +13,19 @@
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_edit_task.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_forgot_password.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_login.xml" value="0.264" />
-        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_main.xml" value="0.4" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_main.xml" value="0.264" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_manage_shared_task.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_modify_shared_task.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_register.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_share_task.xml" value="0.4" />
-        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_shared_task_list.xml" value="0.264" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_shared_task_list.xml" value="0.46647230320699706" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_splash.xml" value="0.24947916666666667" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_update_profile.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/activity_verify_email.xml" value="0.264" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/fragment_empty_shared_task_list.xml" value="0.264" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/fragment_empty_task_list.xml" value="0.264" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/fragment_shared_task_list.xml" value="0.264" />
+        <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/fragment_task_list.xml" value="0.26851851851851855" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/item_shared_task.xml" value="0.4" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/item_task.xml" value="0.25" />
         <entry key="..\:/Programming/android/tugas-kita/app/src/main/res/layout/settings_activity.xml" value="0.25" />

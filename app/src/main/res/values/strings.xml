@@ -39,7 +39,6 @@
     <string name="label_lister_logo">Lister Logo</string>
     <string name="label_button_send">Send Request</string>
     <string name="label_button_sending">Sending…</string>
-    <string name="label_greeting">This is your task,</string>
     <string name="label_shared_to">Shared To</string>
     <string name="value_count_shared_task">null person</string>
     <string name="label_button_see_all">See all</string>
@@ -50,4 +49,5 @@
     <string name="text_empty_shared">This task has not been shared to anyone.</string>
     <string name="helper_write_access">If enabled, the recipient can edit your task.</string>
     <string name="helper_delete_access">If enabled, the recipient can delete your task.</string>
+    <string name="text_empty_tasks">You don\'t have any task now.</string>
 </resources>
