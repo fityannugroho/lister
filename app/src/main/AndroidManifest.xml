@@ -45,7 +45,7 @@
             android:name=".activities.EditTaskActivity"
             android:exported="false"
             android:label="Edit Task"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName=".activities.DetailTaskActivity"
             />
         <activity
             android:name=".activities.AddTaskActivity"

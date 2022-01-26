@@ -21,7 +21,6 @@
             android:layout_height="wrap_content"
             android:text="@string/value_task_title"
             android:textColor="?attr/colorPrimary"
-            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/tvDeadline"
             app:layout_constraintStart_toStartOf="parent"
@@ -33,38 +32,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/value_task_deadline"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tvTitle"
-            />
-
-        <ImageButton
-            android:id="@+id/btnEdit"
-            style="@style/Widget.AppCompat.ImageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="@string/desc_btn_edit"
-            android:src="@drawable/ic_edit_32"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/btnDelete"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/customColorDrawableValue"
-            />
-
-        <ImageButton
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@android:color/transparent"
-            android:contentDescription="@string/desc_btn_delete"
-            android:src="@drawable/ic_delete_32"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="?attr/customColorDrawableValue"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
