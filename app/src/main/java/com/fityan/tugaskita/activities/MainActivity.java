@@ -86,18 +86,14 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
   protected void onStart() {
     super.onStart();
 
+    // Retrieve tasks from database then displaying it.
+    loadTasks();
+
     /* Go to Update Profile Page if display name is unset, */
     if (Objects.equals(user.getDisplayName(), "")) {
       startActivity(new Intent(this, UpdateProfileActivity.class));
       finish();
     }
-  }
-
-
-  @Override
-  protected void onRestart() {
-    super.onRestart();
-    loadTasks();
   }
 
 
@@ -199,9 +195,6 @@ public class MainActivity extends AppCompatActivity implements TaskAdapter.OnIte
     rvTask.setAdapter(taskAdapter);
     rvTask.setLayoutManager(new LinearLayoutManager(this));
     rvTask.setItemAnimator(new DefaultItemAnimator());
-
-    /* Retrieve tasks from database then displaying it. */
-    loadTasks();
   }
 
 
