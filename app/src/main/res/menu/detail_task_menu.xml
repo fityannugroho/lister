@@ -9,4 +9,19 @@
         android:visible="false"
         app:showAsAction="ifRoom" />
 
+    <item
+        android:id="@+id/editItem"
+        android:icon="@drawable/ic_edit_24"
+        android:title="@string/label_button_edit"
+        android:visible="false"
+        app:showAsAction="collapseActionView"
+        />
+
+    <item
+        android:id="@+id/deleteItem"
+        android:icon="@drawable/ic_delete_24"
+        android:title="@string/label_button_delete"
+        android:visible="false"
+        app:showAsAction="collapseActionView"
+        />
 </menu>

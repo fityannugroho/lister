@@ -50,4 +50,6 @@
     <string name="helper_write_access">If enabled, the recipient can edit your task.</string>
     <string name="helper_delete_access">If enabled, the recipient can delete your task.</string>
     <string name="text_empty_tasks">You don\'t have any task now.</string>
+    <string name="label_button_edit">Edit</string>
+    <string name="label_button_delete">Delete</string>
 </resources>

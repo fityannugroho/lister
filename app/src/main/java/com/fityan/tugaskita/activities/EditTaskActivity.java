@@ -1,5 +1,6 @@
 package com.fityan.tugaskita.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -108,5 +109,12 @@ public class EditTaskActivity extends AppCompatActivity {
           inputDescription.setText(taskModel.getDescription());
           inputDeadline.setText(InputHelper.dateToInput(taskModel.getDeadline().toDate()));
         });
+  }
+
+
+  @Override
+  public boolean navigateUpTo(Intent upIntent) {
+    upIntent.putExtra("taskId", taskModel.getId());
+    return super.navigateUpTo(upIntent);
   }
 }
