@@ -6,11 +6,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.fityan.tugaskita.R;
 import com.fityan.tugaskita.helper.InputHelper;
-import com.fityan.tugaskita.models.TaskModel;
 
 import java.util.ArrayList;
 
@@ -18,7 +18,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
   /**
    * List of task.
    */
-  private final ArrayList<TaskModel> tasks;
+  private final ArrayList<TaskItem> taskItems;
 
   /**
    * Closure to handle actions of task item.
@@ -26,8 +26,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
   private final OnItemListener onItemListener;
 
 
-  public TaskAdapter(ArrayList<TaskModel> tasks, OnItemListener onItemListener) {
-    this.tasks = tasks;
+  public TaskAdapter(ArrayList<TaskItem> taskItems, OnItemListener onItemListener) {
+    this.taskItems = taskItems;
     this.onItemListener = onItemListener;
   }
 
@@ -43,17 +43,23 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
 
   @Override
   public void onBindViewHolder(@NonNull TaskListViewHolder holder, int position) {
-    TaskModel task = tasks.get(position);
+    TaskItem taskItem = taskItems.get(position);
 
     // Set display of task items.
-    holder.tvTitle.setText(task.getTitle());
-    holder.tvDeadline.setText(InputHelper.dateToString(task.getDeadline().toDate()));
+    holder.tvTitle.setText(taskItem.getTitle());
+    holder.tvDeadline.setText(InputHelper.dateToString(taskItem.getDeadline()));
+
+    // Display the name of task owner if not null.
+    if (taskItem.getOwnerName() != null) {
+      holder.tvOwner.setText(taskItem.getOwnerName());
+      holder.ownerField.setVisibility(View.VISIBLE);
+    }
   }
 
 
   @Override
   public int getItemCount() {
-    return tasks.size();
+    return taskItems.size();
   }
 
 
@@ -71,6 +77,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
     // View elements.
     protected final TextView tvTitle;
     protected final TextView tvDeadline;
+    protected final TextView tvOwner;
+    protected final ConstraintLayout ownerField;
 
     /**
      * Closure to handle actions of task item.
@@ -84,6 +92,8 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskListViewHo
       // Initialize view elements.
       tvTitle = itemView.findViewById(R.id.tvTitle);
       tvDeadline = itemView.findViewById(R.id.tvDeadline);
+      tvOwner = itemView.findViewById(R.id.tvOwner);
+      ownerField = itemView.findViewById(R.id.ownerField);
 
       // Initialize the itemListener closure.
       this.onItemListener = onItemListener;

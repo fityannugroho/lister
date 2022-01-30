@@ -19,8 +19,11 @@ import com.fityan.tugaskita.activities.DetailTaskActivity;
 import com.fityan.tugaskita.adapters.TaskAdapter;
 import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.collections.TaskCollection;
+import com.fityan.tugaskita.collections.UserCollection;
+import com.fityan.tugaskita.adapters.TaskItem;
 import com.fityan.tugaskita.models.SharedTaskModel;
 import com.fityan.tugaskita.models.TaskModel;
+import com.fityan.tugaskita.models.UserModel;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -31,9 +34,10 @@ public class TaskListFragment extends Fragment implements TaskAdapter.OnItemList
   // Collections.
   private final TaskCollection taskCollection = new TaskCollection();
   private final SharedTaskCollection sharedTaskCollection = new SharedTaskCollection();
+  private final UserCollection userCollection = new UserCollection();
 
   // List of task.
-  private final ArrayList<TaskModel> tasks = new ArrayList<>();
+  private final ArrayList<TaskItem> taskItems = new ArrayList<>();
 
   // The logged user.
   private FirebaseUser user;
@@ -94,7 +98,7 @@ public class TaskListFragment extends Fragment implements TaskAdapter.OnItemList
    */
   private void initTaskAdapter() {
     // Initialize task adapter.
-    taskAdapter = new TaskAdapter(tasks, this);
+    taskAdapter = new TaskAdapter(taskItems, this);
 
     // Set the adapter to displaying task list.
     rvTask.setAdapter(taskAdapter);
@@ -107,7 +111,7 @@ public class TaskListFragment extends Fragment implements TaskAdapter.OnItemList
   public void onItemClick(int position) {
     // Go to Detail Task Page with bring task id.
     Intent intent = new Intent(getContext(), DetailTaskActivity.class);
-    intent.putExtra("taskId", tasks.get(position).getId());
+    intent.putExtra("taskId", taskItems.get(position).getId());
     startActivity(intent);
   }
 
@@ -115,8 +119,8 @@ public class TaskListFragment extends Fragment implements TaskAdapter.OnItemList
   @SuppressLint("NotifyDataSetChanged")
   private void loadTasks() {
     // If tasks is not empty.
-    if (!tasks.isEmpty()) {
-      tasks.clear();
+    if (!taskItems.isEmpty()) {
+      taskItems.clear();
       taskAdapter.notifyDataSetChanged();
     }
 
@@ -124,25 +128,33 @@ public class TaskListFragment extends Fragment implements TaskAdapter.OnItemList
     taskCollection.findAll(user.getUid()).addOnSuccessListener(queryDocumentSnapshots -> {
       for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
         TaskModel task = new TaskModel(document);
+        TaskItem taskItem = new TaskItem(task);
 
         // Add the task to list, then refresh the adapter on data changed.
-        if (tasks.add(task))
-          taskAdapter.notifyItemInserted(tasks.indexOf(task));
+        if (taskItems.add(taskItem))
+          taskAdapter.notifyItemInserted(taskItems.indexOf(taskItem));
       }
     });
 
     // Retrieve shared task data.
-    sharedTaskCollection.findByRecipient(user.getUid()).addOnSuccessListener(querySnapshot -> {
-      for (DocumentSnapshot sharedTask : querySnapshot.getDocuments()) {
-        String taskId = sharedTask.getString(SharedTaskModel.TASK_ID_FIELD);
+    sharedTaskCollection.findByRecipient(user.getUid()).addOnSuccessListener(sharedTaskQuery -> {
+      for (DocumentSnapshot sharedTaskDocument : sharedTaskQuery.getDocuments()) {
+        SharedTaskModel sharedTask = new SharedTaskModel(sharedTaskDocument);
 
         // Get the task.
-        taskCollection.findOne(taskId).addOnSuccessListener(documentSnapshot -> {
-          TaskModel task = new TaskModel(documentSnapshot);
+        taskCollection.findOne(sharedTask.getTaskId()).addOnSuccessListener(taskDocument -> {
+          TaskModel task = new TaskModel(taskDocument);
+          TaskItem taskItem = new TaskItem(task);
 
-          // Add the task to list, then refresh the adapter on data changed.
-          if (tasks.add(task))
-            taskAdapter.notifyItemInserted(tasks.indexOf(task));
+          // Get the task owner.
+          userCollection.findOne(task.getOwnerId()).addOnSuccessListener(ownerDocument -> {
+            UserModel owner = new UserModel(ownerDocument);
+            taskItem.setOwnerName(owner.getName());
+
+            // Add the task to list, then refresh the adapter on data changed.
+            if (taskItems.add(taskItem))
+              taskAdapter.notifyItemInserted(taskItems.indexOf(taskItem));
+          });
         });
       }
     });
