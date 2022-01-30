@@ -1,6 +1,6 @@
-<section  align="center">
+<div  align="center">
   <img src="assets/lister-logo.jpeg">
-</section>
+</div>
 
 # **Lister**
 
