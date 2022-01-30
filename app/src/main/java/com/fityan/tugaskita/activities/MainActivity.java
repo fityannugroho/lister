@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.fityan.tugaskita.R;
+import com.fityan.tugaskita.collections.SharedTaskCollection;
 import com.fityan.tugaskita.collections.TaskCollection;
 import com.fityan.tugaskita.fragments.EmptyTaskListFragment;
 import com.fityan.tugaskita.fragments.TaskListFragment;
@@ -30,8 +31,9 @@ public class MainActivity extends AppCompatActivity {
   private final FirebaseAuth auth = FirebaseAuth.getInstance();
   private final FirebaseUser user = auth.getCurrentUser();
 
-  /* Collections */
+  // Collections.
   private final TaskCollection taskCollection = new TaskCollection();
+  private final SharedTaskCollection sharedTaskCollection = new SharedTaskCollection();
 
   // The fragment manager.
   private FragmentManager fragmentManager;
@@ -104,20 +106,22 @@ public class MainActivity extends AppCompatActivity {
    * are no task. Otherwise, {@code TaskListFragment} will be set.
    */
   private void setFragment() {
-    taskCollection.findAll(user.getUid()).addOnSuccessListener(querySnapshot -> {
-      if (querySnapshot.isEmpty()) {
-        // Load empty task list fragment.
-        fragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .replace(R.id.fragment_container_view, EmptyTaskListFragment.class, null)
-            .commit();
-      } else {
-        // Load task list fragment.
-        fragmentManager.beginTransaction()
-            .setReorderingAllowed(true)
-            .replace(R.id.fragment_container_view, TaskListFragment.class, null)
-            .commit();
-      }
-    });
+    taskCollection.findAll(user.getUid())
+        .addOnSuccessListener(tasksSnapshot -> sharedTaskCollection.findByRecipient(user.getUid())
+            .addOnSuccessListener(sharedTasksSnapshot -> {
+              if (tasksSnapshot.isEmpty() && sharedTasksSnapshot.isEmpty()) {
+                // Load empty task list fragment.
+                fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragment_container_view, EmptyTaskListFragment.class, null)
+                    .commit();
+              } else {
+                // Load task list fragment.
+                fragmentManager.beginTransaction()
+                    .setReorderingAllowed(true)
+                    .replace(R.id.fragment_container_view, TaskListFragment.class, null)
+                    .commit();
+              }
+            }));
   }
 }
