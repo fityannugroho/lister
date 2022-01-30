@@ -44,4 +44,4 @@ After that, you need to [configure the Fireauth](https://firebase.google.com/doc
 
 ## Disclaimer
 
-This project was originally created for college assignment by me (**@fityannugroho**) and **@arisandyk**. This project is open-source and can be used for educational purposes.
+This project was originally created for college assignment by me ([**@fityannugroho**](https://github.com/fityannugroho)) and [**@arisandyk**](https://github.com/arisandyk). This project is open-source and can be used for educational purposes.
