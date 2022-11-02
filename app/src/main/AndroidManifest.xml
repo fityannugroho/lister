@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.fityan.tugaskita"
+    package="com.fityan.lister"
     >
 
     <application
@@ -12,57 +12,57 @@
         android:theme="@style/Theme.TugasKita"
         >
         <activity
-            android:name=".activities.ShareTaskActivity"
+            android:name="com.fityan.lister.activities.ShareTaskActivity"
             android:exported="false"
             android:label="Share To..."
-            android:parentActivityName=".activities.DetailTaskActivity"
+            android:parentActivityName="com.fityan.lister.activities.DetailTaskActivity"
             />
         <activity
-            android:name=".activities.ManageSharedTaskActivity"
+            android:name="com.fityan.lister.activities.ManageSharedTaskActivity"
             android:exported="false"
             android:label="Manage Access"
-            android:parentActivityName=".activities.SharedTaskListActivity"
+            android:parentActivityName="com.fityan.lister.activities.SharedTaskListActivity"
             />
         <activity
-            android:name=".activities.SharedTaskListActivity"
+            android:name="com.fityan.lister.activities.SharedTaskListActivity"
             android:exported="false"
             android:label="Shared List"
-            android:parentActivityName=".activities.DetailTaskActivity"
+            android:parentActivityName="com.fityan.lister.activities.DetailTaskActivity"
             />
         <activity
-            android:name=".activities.ForgotPasswordActivity"
+            android:name="com.fityan.lister.activities.ForgotPasswordActivity"
             android:exported="false"
             android:label="Forgot Password"
-            android:parentActivityName=".activities.LoginActivity"
+            android:parentActivityName="com.fityan.lister.activities.LoginActivity"
             />
         <activity
-            android:name=".activities.DetailTaskActivity"
+            android:name="com.fityan.lister.activities.DetailTaskActivity"
             android:exported="false"
             android:label="Detail Task"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName="com.fityan.lister.activities.MainActivity"
             />
         <activity
-            android:name=".activities.EditTaskActivity"
+            android:name="com.fityan.lister.activities.EditTaskActivity"
             android:exported="false"
             android:label="Edit Task"
-            android:parentActivityName=".activities.DetailTaskActivity"
+            android:parentActivityName="com.fityan.lister.activities.DetailTaskActivity"
             />
         <activity
-            android:name=".activities.AddTaskActivity"
+            android:name="com.fityan.lister.activities.AddTaskActivity"
             android:exported="false"
             android:label="Add Task"
-            android:parentActivityName=".activities.MainActivity"
+            android:parentActivityName="com.fityan.lister.activities.MainActivity"
             />
         <activity
-            android:name=".activities.UpdateProfileActivity"
+            android:name="com.fityan.lister.activities.UpdateProfileActivity"
             android:exported="false"
             />
         <activity
-            android:name=".activities.VerifyEmailActivity"
+            android:name="com.fityan.lister.activities.VerifyEmailActivity"
             android:exported="false"
             />
         <activity
-            android:name=".activities.SplashActivity"
+            android:name="com.fityan.lister.activities.SplashActivity"
             android:exported="true"
             >
             <intent-filter>
@@ -72,15 +72,15 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="com.fityan.lister.activities.LoginActivity"
             android:exported="false"
             />
         <activity
-            android:name=".activities.RegisterActivity"
+            android:name="com.fityan.lister.activities.RegisterActivity"
             android:exported="false"
             />
         <activity
-            android:name=".activities.MainActivity"
+            android:name="com.fityan.lister.activities.MainActivity"
             android:exported="false"
             />
     </application>
